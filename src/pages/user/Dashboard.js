@@ -1,5 +1,5 @@
-import { Divider, Grid, LinearProgress, makeStyles, Paper } from '@material-ui/core';
 import React from 'react';
+import { Divider, Grid, LinearProgress, makeStyles, Paper } from '@material-ui/core';
 
 import VCERNButton from '../../common/elements/VCERNButton';
 
