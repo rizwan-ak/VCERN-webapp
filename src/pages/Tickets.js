@@ -28,7 +28,7 @@ import {
     onTicketCreated,
     onMessageSeen,
     leaveRoom,
-} from '../common/socket';
+} from '../common/socketChat';
 
 import { getDateTime, timeDiffFromNow } from '../common/helper';
 import AC from '../redux/actions/actionCreater';
@@ -81,8 +81,6 @@ function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
     const history = useHistory();
 
     const { _id, organization } = currentUser;
-
-    console.log(`currentUser`, currentUser);
 
     const [showList, setShowList] = useState(true);
     const [showNewTicketModal, setShowNewTicketModal] = useState(false);
@@ -291,7 +289,13 @@ function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
                 </div>
             </Grid>
 
-            <VCERNModal title="Submit a New Ticket" open={showNewTicketModal} onClose={() => setShowNewTicketModal(false)} onConfirm={handleCreateNewTicket}>
+            <VCERNModal
+                title="Submit a New Ticket"
+                open={showNewTicketModal}
+                onClose={() => setShowNewTicketModal(false)}
+                onConfirm={handleCreateNewTicket}
+                buttonTittle="Generate Ticket"
+            >
                 <VCERNTextField placeholder="Subject" value={subject} name="subject" onChange={handleOnChange} className={classes.newTicketInput} />
                 <VCERNTextField multiline rows={5} placeholder="Body" value={newTicket} name="newTicket" onChange={handleOnChange} className={classes.newTicketInput} />
             </VCERNModal>

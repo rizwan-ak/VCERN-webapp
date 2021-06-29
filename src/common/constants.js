@@ -4,6 +4,7 @@ const constants = {
     SET_LOADING: 'SET_LOADING',
     SET_ERROR: 'SET_ERROR',
     SET_USER_TYPE: 'SET_USER_TYPE',
+    SET_SELECTED_POOL: 'SET_SELECTED_POOL',
     USER_TYPE_ORG: 'organization',
     USER_TYPE_MEMBER: 'member',
     USER_TYPE_VCERN: 'admin',

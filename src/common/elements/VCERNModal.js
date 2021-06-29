@@ -5,15 +5,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import VCERNButton from './VCERNButton';
 
-export default function VCERNModal({ title, open, onClose, onConfirm, children }) {
+export default function VCERNModal({ title, open, onClose, onConfirm, children, buttonTittle }) {
     return (
         <div>
             <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
                 <DialogTitle>{title}</DialogTitle>
                 <DialogContent>{children}</DialogContent>
-                <DialogActions>
-                    <VCERNButton color="primary" onClick={onConfirm} value="Generate Ticket" align="right" />
-                </DialogActions>
+                <DialogActions>{buttonTittle && <VCERNButton color="primary" onClick={onConfirm} value={buttonTittle} align="right" />}</DialogActions>
             </Dialog>
         </div>
     );

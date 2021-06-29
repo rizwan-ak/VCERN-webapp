@@ -1,6 +1,5 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
 import logo from '../common/assets/logos/blue.png';
 import VCERNButton from '../common/elements/VCERNButton';
 import VCERNTypography from '../common/elements/VCERNTypography';

@@ -5,12 +5,18 @@ import { InputAdornment, TextField } from '@material-ui/core';
 const styles = theme => ({});
 
 const VCERNTextField = props => {
-    const { isHidden, icon, ...otherProps } = props;
+    const { isHidden, icon, limit, ...otherProps } = props;
 
     if (isHidden) {
         return null;
     } else {
-        return <TextField InputProps={{ startAdornment: <InputAdornment position="start">{icon}</InputAdornment>, inputProps: { max: '2003-05-04' } }} fullWidth {...otherProps} />;
+        return (
+            <TextField
+                InputProps={{ startAdornment: <InputAdornment position="start">{icon}</InputAdornment>, inputProps: { max: limit || '2003-05-04' } }}
+                fullWidth
+                {...otherProps}
+            />
+        );
     }
 };
 

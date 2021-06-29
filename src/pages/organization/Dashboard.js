@@ -12,41 +12,14 @@ import giftPic from '../../common/assets/others/gift.png';
 
 import VCERNGroupAvatar from '../../common/elements/VCERNGroupAvatar';
 
-import cx from 'clsx';
 import { connect } from 'react-redux';
 import icons from '../../common/icons';
+import DashboardHeader from '../../common/DashboardHeader';
 
 const minHeight = 300;
 const useStyles = makeStyles(theme => ({
     paper: { padding: theme.spacing(2), display: 'flex', flexDirection: 'column', minHeight: minHeight, maxHeight: '100%' },
-    coverBox: { background: '#05C6BD', borderRadius: 5, height: 350, [theme.breakpoints.down('sm')]: { height: 200 } },
-    coverPic: { height: '100%', width: '100%' },
-
-    infoBox: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
-    infoPic: {
-        height: 150,
-        width: 150,
-        borderRadius: '50%',
-        border: '2px solid white',
-        margin: '-60px 20px 0 30px',
-        [theme.breakpoints.down('sm')]: { margin: '-50px 10px 0 10px', height: 100, width: 100 },
-    },
-    infoTitle: { fontWeight: 'bold', maxWidth: 320 },
-    infoSettingsBox: {
-        background: 'white',
-        color: '6F7F9F',
-        borderRadius: 5,
-        width: 50,
-        height: 50,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: 10,
-    },
-
-    hideOnSm: { [theme.breakpoints.down('sm')]: { display: 'none' } },
     inviteText: { fontWeight: 'bold', marginTop: 10, textAlign: 'center' },
-    grow: { flexGrow: 1 },
 
     continueButton: { margin: '10px 0' },
     deathInfoBox: { padding: theme.spacing(2), display: 'flex', alignItems: 'center', minHeight: 200, maxHeight: '100%' },
@@ -62,33 +35,13 @@ const useStyles = makeStyles(theme => ({
     buttonIcon: { marginRight: 15 },
 }));
 
-function Dashboard({ currentUser }) {
+function Dashboard({}) {
     const classes = useStyles();
     const history = useHistory();
-    console.log(`currentUser`, currentUser);
-
-    const { verified = '' } = currentUser;
-
-    useEffect(() => {
-        // !verified && history.push('/verify');
-        // eslint-disable-next-line
-    }, []);
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <div className={classes.coverBox}>{/* <img src={giftPic} alt="Died Person" className={classes.coverPic} /> */}</div>
-                <div className={classes.infoBox}>
-                    <img src={giftPic} alt="Died Person" className={classes.infoPic} />
-                    <div className={cx(classes.hideOnSm, classes.grow)}>
-                        <VCERNTypography className={classes.infoTitle} variant="h5" value="Cameroonian Brotherhood Association  " />
-                        <VCERNTypography className={classes.infoTitle} variant="body1" customColor="#657285" value="Tagline goes here. " />
-                    </div>
-                    <VCERNGroupAvatar className={cx(classes.hideOnSm)} />
-                    <VCERNTypography className={cx(classes.boldText, classes.hideOnSm)} variant="body1" value="1.2K members" />
-                    <div className={cx(classes.infoSettingsBox)}>{icons.settings}</div>
-                </div>
-            </Grid>
+            <DashboardHeader />
             <Grid item xs={12} md={6}>
                 <Paper className={classes.paper}>
                     <VCERNTypography variant="body1" className={classes.graphText} value="Total Members: 2032" />

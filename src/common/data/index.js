@@ -1,3 +1,4 @@
+import icons from '../icons';
 import states from './data.json';
 
 export const statesList = Object.keys(states).map(key => key) ?? [];
@@ -20,4 +21,41 @@ export const tosList = [
     'Such as: After that, every time a member dies in his pool, every member of that pool will be charged the Contribution amount ($1) and the deceased beneficiary will receive the Payout ($1000). ',
     'Such as: After that, every time a member dies in his pool, every member of that pool will be charged the Contribution amount ($1) and the deceased beneficiary will receive the Payout ($1000). ',
     'Such as: After that, every time a member dies in his pool, every member of that pool will be charged the Contribution amount ($1) and the deceased beneficiary will receive the Payout ($1000). ',
+];
+
+export const contributionFequencyList = ['Yearly', 'Monthly', 'Weekly', 'Daily'];
+
+export const MembersMenu = [
+    { title: 'Dashboard', href: 'dashboard', icon: icons.dashboard },
+    { title: 'Messages', href: 'messages', icon: icons.messages },
+    // { title: 'Invite', href: 'dashboard', icon: icons.invite },
+    { title: 'Profile', href: 'profile', icon: icons.profile },
+    { title: 'Payments', href: 'payments', icon: icons.payment },
+    { title: 'Settings', href: 'settings', icon: icons.settings },
+];
+
+export const organizationsMenu = [
+    { title: 'Dashboard', href: 'dashboard', icon: icons.dashboard },
+    { title: 'Manage Groups', href: 'manage-groups', icon: icons.group },
+    { title: 'Manage Member', href: 'manage-members', icon: icons.memberSettings },
+    { title: 'Messages', href: 'messages', icon: icons.messages },
+    { title: 'Tickets', href: 'tickets', icon: icons.ticket },
+    { title: 'Payments', href: 'payments', icon: icons.payment },
+    { title: 'Settings', href: 'settings', icon: icons.settings },
+];
+
+export const vcernMenu = [
+    { title: 'Dashboard', href: 'dashboard', icon: icons.dashboard },
+    { title: 'Manage Organizations', href: 'manage-organizations', icon: icons.group },
+    { title: 'Manage Admins', href: 'manage-members', icon: icons.memberSettings },
+    { title: 'Messages', href: 'messages', icon: icons.messages },
+    { title: 'Tickets', href: 'tickets', icon: icons.ticket },
+    { title: 'Articles/Blogs', href: 'blogs', icon: icons.blogs },
+    { title: 'Requests', href: 'requests', icon: icons.requests },
+    { title: 'Payments', href: 'payments', icon: icons.payment },
+];
+
+export const vcernAdminRoles = [
+    { title: 'Admin', value: 'basic' },
+    { title: 'Super Admin', value: 'super-admin' },
 ];

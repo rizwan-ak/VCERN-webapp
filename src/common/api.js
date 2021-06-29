@@ -1,16 +1,10 @@
 import axios from 'axios';
+import constants from './constants';
 const api = axios.create({ baseURL: process.env.REACT_APP_BASEAPI });
 
 const login = async ({ email, password }, type, onError) => {
     try {
-        const response = await api.post(`/${type === 'organization' ? 'organization-admin' : type}/login`, {
-            email,
-            password,
-            // email: 'lupinokhan@gmail.com',
-            // email: 'organ_admin@gmail.com',
-            // email: 'vcern@gmail.com',
-            // password: '123123',
-        });
+        const response = await api.post(`/${type === 'organization' ? 'organization-admin' : type}/login`, { email, password });
         return response?.data;
     } catch (error) {
         onError(error?.response.data);
@@ -67,36 +61,6 @@ const userRegister = async (data, onError) => {
                 address: { street_address: b_street_address, apt: b_apt, city: b_city, state: b_state, zip_code: b_zip_code },
             },
             payment_method,
-            // first_name: 'Member',
-            // last_name: 'Name',
-            // gender: 'male',
-            // email: 'member@gmail.com',
-            // dob: 'Mon May 10 2021 20:15:21 GMT+0500 (Pakistan Standard Time)',
-            // phone: '+44',
-            // password: '123123',
-            // organization: '60994cc34f58640552afae6b',
-            // address: {
-            //     street_address: '123 Street',
-            //     apt: 'House 123',
-            //     city: 'Some City',
-            //     state: 'Alabama',
-            //     zip_code: '45000',
-            // },
-            // beneficiary: {
-            //     first_name: 'Son',
-            //     last_name: 'Guy',
-            //     email: 'son@gmail.com',
-            //     phone: '+1111111111',
-            //     dob: 'Mon May 10 2021 20:15:21 GMT+0500 (Pakistan Standard Time)',
-            //     relationship: 'son',
-            //     address: {
-            //         street_address: '123 Street',
-            //         apt: 'House 123',
-            //         city: 'Some City',
-            //         state: 'Alabama',
-            //         zip_code: '45000',
-            //     },
-            // },
         });
         return response?.data;
     } catch (error) {
@@ -138,12 +102,6 @@ const organizationRegister = async (data, onError) => {
             contact_second: { first_name: p2_first_name, last_name: p2_last_name, email: p2_email, phone: p2_phone },
             admin: { first_name, last_name, phone: a_phone, email, password },
             payment_method,
-            // name: 'OrganIzation',
-            // phone: '+1111111111',
-            // address: { street_address: '123 Street', apt: 'House 123', city: 'Some City', state: 'Alabama', zip_code: '45000' },
-            // contact_first: { first_name: 'first', last_name: 'Guy', email: 'first_guy@gmail.com', phone: '+1111111111' },
-            // contact_second: { first_name: 'second', last_name: 'Guy', email: 'second_guy@gmail.com', phone: '+1111111111' },
-            // admin: { first_name: 'first', last_name: 'Guy', email: 'organ_admin@gmail.com', username: 'organ_admin', password: '123123', phone: '+1111111111' },
         });
         return response?.data;
     } catch (error) {
@@ -254,6 +212,332 @@ const uploadFile = async ({ url, file, type }, onError) => {
     });
 };
 
+const requestNewPool = async (data, token, onError) => {
+    try {
+        const { end_date, start_date } = data;
+        await api.post(
+            `/pool/request`,
+            { ...data, start_date: new Date(start_date), end_date: new Date(end_date) },
+            {
+                headers: { 'auth-token': token },
+            },
+        );
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchNewPoolRequests = async (token, onError) => {
+    try {
+        const response = await api.get('/pool/getAllPoolRequests', {
+            headers: {
+                'auth-token': token,
+            },
+        });
+        return response?.data?.requests;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const respondToNewPoolRequest = async (data, token, onError) => {
+    try {
+        await api.post(`/pool/respond`, { ...data }, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchPools = async (data, type, token, onError) => {
+    try {
+        const response = await api.get(
+            `pool/${type === constants.USER_TYPE_MEMBER ? 'getPoolsByMember' : 'getPoolsByOrganization'}/${type === constants.USER_TYPE_MEMBER ? data._id : data.organization}`,
+            {
+                headers: { 'auth-token': token },
+            },
+        );
+        return response?.data?.pools;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const triggerNotification = async (data, token, onError) => {
+    try {
+        await api.post(`/notification/announcement`, { ...data }, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const triggerEvent = async (data, token, onError) => {
+    try {
+        await api.post(`/pool/createEvent`, { ...data }, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchInvitations = async (token, onError) => {
+    try {
+        const response = await api.get(`/pool/getInvitations`, { headers: { 'auth-token': token } });
+        return response?.data?.invitations;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const joinPool = async (id, token, onError) => {
+    try {
+        await api.post(`/pool/joinPool/${id}`, { status: 'ACCEPTED' }, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const addBlog = async (data, token, onError) => {
+    try {
+        await api.post(`/blog/`, { ...data }, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchBlogs = async (token, onError) => {
+    try {
+        const response = await api.get(`/blog/`, { headers: { 'auth-token': token } });
+        return response?.data?.blogs;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const toggleOrganizationsAvailability = async (id, token, onError) => {
+    try {
+        const response = await api.post(`/organization/toggleDisabillity/${id}`, {}, { headers: { 'auth-token': token } });
+        return response?.data?.organization;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchAdmins = async (token, onError) => {
+    try {
+        const response = await api.get(`/admin/`, { headers: { 'auth-token': token } });
+        return response?.data?.admins;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const addVcernAdmin = async (data, token, onError) => {
+    try {
+        const response = await api.post(`/admin/`, { ...data }, { headers: { 'auth-token': token } });
+        return response?.data?.admin;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const toggleVcernAdminRole = async (id, token, onError) => {
+    try {
+        const response = await api.post(`/admin/togglePermissions/${id}`, {}, { headers: { 'auth-token': token } });
+        return response?.data?.admin;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const toggleVcernAdminAvailability = async (id, token, onError) => {
+    try {
+        const response = await api.post(`/admin/toggleDisabillity/${id}`, {}, { headers: { 'auth-token': token } });
+        return response?.data?.admin;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const customizeOrganization = async (data, id, token, onError) => {
+    try {
+        const response = await api.patch(`/organization/customize/${id}`, { ...data }, { headers: { 'auth-token': token } });
+        return response?.data?.organization;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchMembersNotInPool = async (id, token, onError) => {
+    try {
+        const response = await api.get(`/pool/getMembersNotInPool/${id}`, { headers: { 'auth-token': token } });
+        return response?.data?.members;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchOrganizationAdmins = async (id, onError) => {
+    try {
+        const response = await api.get(`/organization/getAllAdmins/${id}`);
+        return response?.data?.admins;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchPoolMembers = async (id, token, onError) => {
+    try {
+        const response = await api.get(`/pool/getMembersByPool/${id}`, { headers: { 'auth-token': token } });
+        return response?.data?.members;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const inviteToJoin = async (data, type, token, onError) => {
+    try {
+        await api.post(`/organization/invite/${type}/`, { ...data }, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const makeMemberAdmin = async (id, token, onError) => {
+    try {
+        const response = await api.post(`/organization/makeAdmin/${id}/`, {}, { headers: { 'auth-token': token } });
+        return response?.data?.admin;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const inviteToJoinPool = async (data, token, onError) => {
+    try {
+        const response = await api.post(`/pool/invite/`, { ...data }, { headers: { 'auth-token': token } });
+        return response?.data?.message;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const removeOrganizationAdmin = async (id, token, onError) => {
+    try {
+        const response = await api.post(`/organization-admin/toggleDisabillity/${id}`, {}, { headers: { 'auth-token': token } });
+        return response?.data?.message;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const removeMemberFromPool = async (id, token, onError) => {
+    try {
+        const response = await api.delete(`/pool/removeMember/${id}`, { headers: { 'auth-token': token } });
+        return response?.data?.message;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const updateMember = async (data, token, onError) => {
+    const { newPhone, newEmail, newState, newCity, newPassword, newApt, newStreet } = data;
+    try {
+        const response = await api.patch(
+            `/member`,
+            {
+                phone: newPhone,
+                email: newEmail,
+                password: newPassword,
+                state: newState,
+                city: newCity,
+                apt: newApt,
+                street_address: newStreet,
+            },
+            { headers: { 'auth-token': token } },
+        );
+        return response?.data?.memberToUpdate;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const updateBeneficiary = async (data, token, onError) => {
+    const { b_first_name, b_last_name, b_email, b_dob, b_phone, b_relation, b_street_address, b_apt, b_state, b_city, b_zip_code } = data;
+    try {
+        const response = await api.patch(
+            `/member/beneficiary`,
+            {
+                dob: b_dob,
+                email: b_email,
+                first_name: b_first_name,
+                last_name: b_last_name,
+                phone: b_phone,
+                relationship: b_relation,
+                state: b_state,
+                city: b_city,
+                apt: b_apt,
+                street_address: b_street_address,
+                zip_code: b_zip_code,
+            },
+            { headers: { 'auth-token': token } },
+        );
+        return response?.data?.memberToUpdate;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchDocs = async (id, token, onError) => {
+    try {
+        const response = await api.get(`/member/documents/get/${id}`, { headers: { 'auth-token': token } });
+        return response?.data?.docs;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const addDoc = async (data, token, onError) => {
+    try {
+        const response = await api.post(`/member/documents/add`, { ...data }, { headers: { 'auth-token': token } });
+        return response?.data?.doc;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
 const API = {
     login,
     userRegister,
@@ -265,6 +549,34 @@ const API = {
     sendVerificationCode,
     getPreSignedLink,
     uploadFile,
+    requestNewPool,
+    fetchNewPoolRequests,
+    respondToNewPoolRequest,
+    fetchPools,
+    triggerNotification,
+    triggerEvent,
+    fetchInvitations,
+    joinPool,
+    addBlog,
+    fetchBlogs,
+    toggleOrganizationsAvailability,
+    fetchAdmins,
+    addVcernAdmin,
+    toggleVcernAdminRole,
+    toggleVcernAdminAvailability,
+    customizeOrganization,
+    fetchMembersNotInPool,
+    fetchOrganizationAdmins,
+    fetchPoolMembers,
+    inviteToJoin,
+    makeMemberAdmin,
+    inviteToJoinPool,
+    removeOrganizationAdmin,
+    removeMemberFromPool,
+    updateMember,
+    updateBeneficiary,
+    fetchDocs,
+    addDoc,
 };
 
 export default API;

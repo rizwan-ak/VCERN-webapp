@@ -24,7 +24,7 @@ const VCERNButton = props => {
         return null;
     } else {
         return (
-            <div style={{ textAlign: align || 'center', width: '100%' }}>
+            <div style={{ textAlign: align || 'center' }}>
                 <Button
                     disableElevation
                     disableRipple

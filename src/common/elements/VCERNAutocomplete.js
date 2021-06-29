@@ -16,6 +16,7 @@ export default function VCERNAutocomplete(props) {
                     <TextField
                         label={label}
                         {...params}
+                        {...props}
                         InputProps={{
                             ...params.InputProps,
                             startAdornment: (

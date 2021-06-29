@@ -54,7 +54,7 @@ function Landing({ login, type, token, setUserType }) {
     };
 
     const handleSubmit = () => {
-        login(state, type, () => history.push('/dashboard'));
+        login(state, type, () => (type === constants.USER_TYPE_VCERN ? history.push('/dashboard') : history.push('/select-pool')));
     };
 
     useEffect(() => {

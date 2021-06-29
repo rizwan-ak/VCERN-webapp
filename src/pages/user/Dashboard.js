@@ -1,6 +1,5 @@
 import { Divider, Grid, LinearProgress, makeStyles, Paper } from '@material-ui/core';
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router';
+import React from 'react';
 
 import VCERNButton from '../../common/elements/VCERNButton';
 
@@ -36,15 +35,8 @@ const useStyles = makeStyles(theme => ({
     aboutPic: { height: 375, width: 'auto', maxWidth: '100%' },
 }));
 
-function Dashboard({ currentUser }) {
+function Dashboard({}) {
     const classes = useStyles();
-    const history = useHistory();
-
-    const { verified = '' } = currentUser;
-
-    useEffect(() => {
-        // !verified && history.push('/verify');
-    }, []);
 
     return (
         <Grid container spacing={3}>

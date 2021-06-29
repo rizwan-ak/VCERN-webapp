@@ -16,27 +16,37 @@ import Verify from '../pages/Verify';
 import Terms from '../pages/Terms';
 import PaymentAgreements from '../pages/PaymentAgreements';
 import ResetPassword from '../pages/ResetPassword';
+import Messages from '../pages/Messages';
+import Tickets from '../pages/Tickets';
+import SelectPool from '../pages/SelectPool';
+import AllPools from '../pages/AllPools';
+import Blogs from '../pages/Blogs';
+import SingleBlog from '../pages/SingleBlog';
+import Profile from '../pages/Profile';
 
 import UserRegister from '../pages/user/Register';
 import UserDashboard from '../pages/user/Dashboard';
-import UserMessages from '../pages/user/Messages';
+import UserSettings from '../pages/user/Settings';
+import UserEditProfile from '../pages/user/EditProfile';
+import UserDocuments from '../pages/user/Documents';
 
 import OrganizationRegister from '../pages/organization/Register';
 import OrganizationDashboard from '../pages/organization/Dashboard';
-import OrganizationMessages from '../pages/organization/Messages';
-import OrganizationTickets from '../pages/organization/Tickets';
+import NewPool from '../pages/organization/NewPool';
+import ManageGroups from '../pages/organization/ManageGroups';
+import OrganizationSettings from '../pages/organization/Settings';
+import OrganizationManageMembers from '../pages/organization/ManageMembers';
 
 import VCERNDashboard from '../pages/vcern/Dashboard';
-import Messages from '../pages/Messages';
-import Tickets from '../pages/Tickets';
+import VCERNManageOrganizations from '../pages/vcern/ManageOrganizations';
+import VCERNManageAdmins from '../pages/vcern/ManageAdmins';
+import VCERNAddBlog from '../pages/vcern/AddBlog';
 
 function Routes({ loading, type, error, token, setError, currentUser }) {
     const commonRoutes = [
         { path: '/', component: Landing },
         { path: '/login', component: Login },
         { path: '/vcern-admin/login', component: Login },
-        { path: '/terms-and-conditions', component: Terms },
-        { path: '/payment-agreements', component: PaymentAgreements },
         { path: '/forgot-password', component: ForgotPassword },
         { path: `/reset/${type}/:id/:token`, component: ResetPassword },
     ];
@@ -44,25 +54,46 @@ function Routes({ loading, type, error, token, setError, currentUser }) {
     const memberRoutes = [
         { path: '/dashboard', component: UserDashboard },
         { path: '/messages', component: Messages },
+        { path: '/select-pool', component: SelectPool },
+        { path: '/all-pools', component: AllPools },
+        { path: '/blogs', component: Blogs },
+        { path: '/blog', component: SingleBlog },
+        { path: '/settings', component: UserSettings },
+        { path: '/edit-profile', component: UserEditProfile },
+        { path: '/profile', component: Profile },
+        { path: '/documents', component: UserDocuments },
     ];
 
     const organizationRoutes = [
         { path: '/dashboard', component: OrganizationDashboard },
         { path: '/messages', component: Messages },
         { path: '/tickets', component: Tickets },
+        { path: '/select-pool', component: SelectPool },
+        { path: '/new-pool', component: NewPool },
+        { path: '/all-pools', component: AllPools },
+        { path: '/manage-groups', component: ManageGroups },
+        { path: '/settings', component: OrganizationSettings },
+        { path: '/manage-members', component: OrganizationManageMembers },
+        { path: '/member/:id', component: Profile },
     ];
 
     const vcernRoutes = [
         { path: '/dashboard', component: VCERNDashboard },
         { path: '/messages', component: Messages },
         { path: '/tickets', component: Tickets },
+        { path: '/requests', component: AllPools },
+        { path: '/manage-organizations', component: VCERNManageOrganizations },
+        { path: '/manage-members', component: VCERNManageAdmins },
+        { path: '/add-blog', component: VCERNAddBlog },
+        { path: '/blogs', component: Blogs },
+        { path: '/blog', component: SingleBlog },
     ];
 
     const RedirectToDashboard = ({ path, component }) => {
         if (!token) {
             return <Route exact path={path} component={component} />;
         } else {
-            return <Redirect to="/dashboard" />;
+            return <Redirect to={type === constants.USER_TYPE_VCERN ? '/dashboard' : '/select-pool'} />;
         }
     };
 
@@ -76,6 +107,8 @@ function Routes({ loading, type, error, token, setError, currentUser }) {
                         <RedirectToDashboard exact key={idx} path={el.path} component={el.component} />
                     ))}
                     <Route exact path="/verify" component={Verify} />
+                    <Route exact path="/terms-and-conditions" component={PaymentAgreements} />
+                    <Route exact path="/payment-agreements" component={Terms} />
 
                     {/* users routes */}
                     {type === constants.USER_TYPE_MEMBER && (

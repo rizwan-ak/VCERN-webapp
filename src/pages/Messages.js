@@ -1,8 +1,6 @@
-import { Divider, Grid, makeStyles, Paper } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 
-import VCERNButton from '../common/elements/VCERNButton';
 import VCERNTypography from '../common/elements/VCERNTypography';
 import icons, { Attach, BackArrow, Send } from '../common/icons';
 
@@ -12,7 +10,7 @@ import VCERNAvatar from '../common/elements/VCERNAvatar';
 
 import cx from 'clsx';
 
-import { sendMessage, join, onJoin, onRoomJoin, onChatsUpdate, onMessageRecieved, disconnectSocket, joinRoom, onMessageSeen, leaveRoom } from '../common/socket';
+import { sendMessage, join, onJoin, onRoomJoin, onChatsUpdate, onMessageRecieved, disconnectSocket, joinRoom, onMessageSeen, leaveRoom } from '../common/socketChat';
 import { getDateTime, timeDiffFromNow } from '../common/helper';
 import AC from '../redux/actions/actionCreater';
 import FileMessage from '../common/FileMessage';
@@ -56,7 +54,6 @@ const useStyles = makeStyles(theme => ({
 
 function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
     const classes = useStyles();
-    const history = useHistory();
 
     const { _id, organization } = currentUser;
 
@@ -67,7 +64,6 @@ function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
     const [filteredChats, setFilteredChats] = useState([]);
     const [state, setState] = useState({ message: '', search: '' });
 
-    console.log(`allChats`, allChats);
     const { message, search } = state;
     useEffect(() => {
         join(type === constants.USER_TYPE_VCERN ? 'vcern_admin' : type, _id, organization);

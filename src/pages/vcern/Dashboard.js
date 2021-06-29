@@ -12,6 +12,9 @@ import giftPic from '../../common/assets/others/gift.png';
 import waitingPic from '../../common/assets/others/dashboard-waiting.jpg';
 import contributePic from '../../common/assets/others/contribute.png';
 import payoutPic from '../../common/assets/others/payout.png';
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
+import AC from '../../redux/actions/actionCreater';
 
 const minHeight = 300;
 const useStyles = makeStyles(theme => ({
@@ -34,9 +37,11 @@ const useStyles = makeStyles(theme => ({
     continueButton: { margin: '10px 0' },
 }));
 
-export default function PaymentAgreements() {
+function Dashboard({}) {
     const classes = useStyles();
     const history = useHistory();
+
+    useEffect(() => {}, []);
 
     return (
         <Grid container spacing={3}>
@@ -124,3 +129,5 @@ export default function PaymentAgreements() {
         </Grid>
     );
 }
+
+export default connect(state => state, {})(Dashboard);
