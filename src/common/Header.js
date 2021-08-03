@@ -31,6 +31,7 @@ import { timeDiffFromNow } from './helper';
 
 import { MembersMenu, vcernMenu, organizationsMenu } from './data';
 import PaymentModal from './PaymentModal';
+import VCERNAlert from './elements/VCERNAlert';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -96,7 +97,7 @@ const useStyles = makeStyles(theme => ({
     notificationTextBox: { display: 'flex', flexDirection: 'column' },
 }));
 
-function Header({ children, logout, currentUser, type }) {
+function Header({ children, logout, currentUser, type, joinPool, token, payEvent, currentPageTitle }) {
     const classes = useStyles();
     const history = useHistory();
     const location = useLocation();
@@ -108,6 +109,8 @@ function Header({ children, logout, currentUser, type }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
 
+    const [successMessage, setSuccessMessage] = useState(false);
+
     const { image, first_name, last_name, _id, organization } = currentUser;
 
     useEffect(() => {
@@ -117,6 +120,7 @@ function Header({ children, logout, currentUser, type }) {
         onNewNotification(setNotifications);
 
         return () => disconnectSocket();
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -133,15 +137,22 @@ function Header({ children, logout, currentUser, type }) {
     };
 
     const handleConfirmPayment = () => {
-        console.log(notification);
-        setShowPaymentModal(false);
+        notification?.type === 'pool_invitation'
+            ? joinPool(notification?.pool_invitation, token, () => {
+                  setSuccessMessage(`Joined New Pool Successfully.`);
+                  setShowPaymentModal(false);
+              })
+            : payEvent(notification?.event, token, () => {
+                  setSuccessMessage(`Successfully Paid for the event.`);
+                  setShowPaymentModal(false);
+              });
     };
 
     const handleMenuOption = currentNotification => {
         setNotification(currentNotification);
         const { type } = currentNotification;
         setAnchorEl(null);
-        type === 'pool_invitation' && setShowPaymentModal(true);
+        (type === 'pool_invitation' || type === 'event') && setShowPaymentModal(true);
 
         // handle announcment type
         // handleNotification();
@@ -158,7 +169,7 @@ function Header({ children, logout, currentUser, type }) {
                         <IconButton edge="start" aria-label="open drawer" onClick={() => setOpen(true)} className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
                             {icons.menu}
                         </IconButton>
-                        <VCERNTypography variant="h6" noWrap value="Dashboard" className={classes.title} />
+                        <VCERNTypography variant="h6" noWrap value={currentPageTitle} className={classes.title} />
                         {!(type === constants.USER_TYPE_VCERN) && (
                             <Button color="primary" variant="outlined" onClick={() => history.push('/select-pool')}>
                                 Change Pool
@@ -223,9 +234,15 @@ function Header({ children, logout, currentUser, type }) {
                     {children}
                 </Container>
             </main>
-            <PaymentModal onClose={() => setShowPaymentModal(false)} open={showPaymentModal} onConfirm={handleConfirmPayment} title="Join" />
+            <PaymentModal
+                onClose={() => setShowPaymentModal(false)}
+                open={showPaymentModal}
+                onConfirm={handleConfirmPayment}
+                title={notification?.type === 'pool_invitation' ? 'Join' : 'Pay'}
+            />
+            <VCERNAlert message={successMessage} onClose={() => setSuccessMessage(false)} success={true} />
         </div>
     );
 }
 
-export default connect(state => state, { logout: AC.logout })(Header);
+export default connect(state => state, { logout: AC.logout, joinPool: AC.joinPool, payEvent: AC.payEvent })(Header);

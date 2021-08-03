@@ -1,18 +1,10 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router';
 
 import VCERNButton from '../../common/elements/VCERNButton';
 
-import VCERNLineChart from '../../common/elements/VCERNLineChart';
-import VCERNPieChart from '../../common/elements/VCERNPieChart';
 import VCERNTypography from '../../common/elements/VCERNTypography';
 
-import giftPic from '../../common/assets/others/gift.png';
-
-import VCERNGroupAvatar from '../../common/elements/VCERNGroupAvatar';
-
-import cx from 'clsx';
 import { connect } from 'react-redux';
 import icons from '../../common/icons';
 import VCERNTextField from '../../common/elements/VCERNTextField';
@@ -27,14 +19,19 @@ const useStyles = makeStyles(theme => ({
     button: { margin: '20px 0' },
 }));
 
-function ManageGroups({ triggerEvent, triggerNotification, token, selectedPool }) {
+function ManageGroups({ triggerEvent, triggerNotification, token, selectedPool, setCurrentPageTitle }) {
     const classes = useStyles();
-    const history = useHistory();
 
     const [data, setData] = useState({ description: '', member_id: '', place_death: '', cause_death: '' });
     const [successMessage, setSuccessMessage] = useState('');
 
     const { description, member_id, place_death, cause_death } = data;
+
+    useEffect(() => {
+        setCurrentPageTitle(`Manage Groups`);
+
+        // eslint-disable-next-line
+    }, []);
 
     const handleOnChange = evt => {
         const { value, name } = evt.target;
@@ -85,4 +82,4 @@ function ManageGroups({ triggerEvent, triggerNotification, token, selectedPool }
         </Grid>
     );
 }
-export default connect(state => state, { triggerNotification: AC.triggerNotification, triggerEvent: AC.triggerEvent })(ManageGroups);
+export default connect(state => state, { triggerNotification: AC.triggerNotification, triggerEvent: AC.triggerEvent, setCurrentPageTitle: AC.setCurrentPageTitle })(ManageGroups);

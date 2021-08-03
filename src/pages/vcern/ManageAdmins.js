@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     title: { fontWeight: 'bold', margin: '10px 0' },
 }));
 
-function ManageAdmins({ fetchAdmins, token, addVcernAdmin, setError, toggleVcernAdminRole, toggleVcernAdminAvailability }) {
+function ManageAdmins({ fetchAdmins, token, addVcernAdmin, setError, toggleVcernAdminRole, toggleVcernAdminAvailability, setCurrentPageTitle }) {
     const classes = useStyles();
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -46,11 +46,16 @@ function ManageAdmins({ fetchAdmins, token, addVcernAdmin, setError, toggleVcern
     const { search, email, type, first_name, last_name, phone } = state;
 
     useEffect(() => {
+        setCurrentPageTitle(`Manage Admins`);
         fetchAdmins(token, setAdmins);
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         setFilteredAdmins(admins.filter(el => el?.first_name.toLowerCase().includes(search.toLowerCase()) || el?.last_name.toLowerCase().includes(search.toLowerCase())));
+
+        // eslint-disable-next-line
     }, [search.length]);
 
     useEffect(() => {
@@ -196,4 +201,5 @@ export default connect(state => state, {
     setError: AC.setError,
     toggleVcernAdminRole: AC.toggleVcernAdminRole,
     toggleVcernAdminAvailability: AC.toggleVcernAdminAvailability,
+    setCurrentPageTitle: AC.setCurrentPageTitle,
 })(ManageAdmins);

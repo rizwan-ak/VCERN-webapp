@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import AC from '../../redux/actions/actionCreater';
 import VCERNAlert from '../../common/elements/VCERNAlert';
+import { getRoles } from '../../common/data';
 
 const useStyles = makeStyles(theme => ({
     input: { margin: '5px 0' },
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     imageBox: { display: 'flex', alignItems: 'center', flexDirection: 'column' },
 }));
 
-function Settings({ currentOrganization, getPreSignedLink, uploadFile, customizeOrganization, token }) {
+function Settings({ currentOrganization, getPreSignedLink, uploadFile, customizeOrganization, token, type, setCurrentPageTitle }) {
     const classes = useStyles();
 
     const [state, setState] = useState({ name: '', tagline: '', description: '', image: '', about_image: '', tempimage: '', tempabout_image: '' });
@@ -35,6 +36,12 @@ function Settings({ currentOrganization, getPreSignedLink, uploadFile, customize
         const { name, value } = evt.target;
         setState({ ...state, [name]: value });
     };
+
+    useEffect(() => {
+        setCurrentPageTitle(`${getRoles[type]} Settings`);
+
+        // eslint-disable-next-line
+    }, []);
 
     useEffect(() => {
         setState({ ...currentOrganization });
@@ -99,4 +106,5 @@ export default connect(state => state, {
     uploadFile: AC.uploadFile,
     setError: AC.setError,
     customizeOrganization: AC.customizeOrganization,
+    setCurrentPageTitle: AC.setCurrentPageTitle,
 })(Settings);

@@ -6,13 +6,11 @@ import { useState } from 'react';
 import icons from '../../common/icons';
 import VCERNButton from '../../common/elements/VCERNButton';
 
-import uploadImage from '../../common/assets/others/uploadImage.png';
-import VCERNAvatar from '../../common/elements/VCERNAvatar';
 import VCERNImageUpload from '../../common/elements/VCERNImageUpload';
-import { useEffect } from 'react';
-import { connect } from 'react-redux';
 import AC from '../../redux/actions/actionCreater';
 import VCERNAlert from '../../common/elements/VCERNAlert';
+import { connect } from 'react-redux';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles(theme => ({
     input: { margin: '5px 0' },
@@ -26,12 +24,18 @@ const useStyles = makeStyles(theme => ({
     imageBox: { display: 'flex', alignItems: 'center', flexDirection: 'column' },
 }));
 
-function AddBlog({ getPreSignedLink, uploadFile, addBlog, token, setError }) {
+function AddBlog({ getPreSignedLink, uploadFile, addBlog, token, setError, setCurrentPageTitle }) {
     const classes = useStyles();
 
     const [state, setState] = useState({ title: '', author: '', description: '', image: '', link: '', tempImage: '' });
     const [successMessage, setSuccessMessage] = useState(false);
     const { title, author, description, image, link, tempImage } = state;
+
+    useEffect(() => {
+        setCurrentPageTitle('Add Article');
+
+        // eslint-disable-next-line
+    }, []);
 
     const handleOnChange = evt => {
         const { name, value } = evt.target;
@@ -89,4 +93,10 @@ function AddBlog({ getPreSignedLink, uploadFile, addBlog, token, setError }) {
         </div>
     );
 }
-export default connect(state => state, { getPreSignedLink: AC.getPreSignedLink, uploadFile: AC.uploadFile, addBlog: AC.addBlog, setError: AC.setError })(AddBlog);
+export default connect(state => state, {
+    getPreSignedLink: AC.getPreSignedLink,
+    uploadFile: AC.uploadFile,
+    addBlog: AC.addBlog,
+    setError: AC.setError,
+    setCurrentPageTitle: AC.setCurrentPageTitle,
+})(AddBlog);

@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     listHeader: { margin: '10px 0' },
 }));
 
-function ManageOrganizations({ fetchOrganizations, organizations, toggleOrganizationsAvailability, token }) {
+function ManageOrganizations({ organizations, toggleOrganizationsAvailability, token, setCurrentPageTitle }) {
     const classes = useStyles();
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -33,11 +33,15 @@ function ManageOrganizations({ fetchOrganizations, organizations, toggleOrganiza
     const [filteredorganizations, setFilteredOrganizations] = useState([]);
 
     useEffect(() => {
-        fetchOrganizations();
+        setCurrentPageTitle(`Manage Organizations`);
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         setFilteredOrganizations(organizations.filter(el => el?.name.toLowerCase().includes(search.toLowerCase())));
+
+        // eslint-disable-next-line
     }, [search.length]);
 
     useEffect(() => {
@@ -93,4 +97,4 @@ function ManageOrganizations({ fetchOrganizations, organizations, toggleOrganiza
         </div>
     );
 }
-export default connect(state => state, { fetchOrganizations: AC.fetchOrganizations, toggleOrganizationsAvailability: AC.toggleOrganizationsAvailability })(ManageOrganizations);
+export default connect(state => state, { toggleOrganizationsAvailability: AC.toggleOrganizationsAvailability, setCurrentPageTitle: AC.setCurrentPageTitle })(ManageOrganizations);

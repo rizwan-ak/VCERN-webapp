@@ -1,10 +1,12 @@
 import { Divider, makeStyles } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import VCERNAvatar from '../common/elements/VCERNAvatar';
 import VCERNTypography from '../common/elements/VCERNTypography';
 import { getFormattedDate } from '../common/helper';
+import AC from '../redux/actions/actionCreater';
 
 const useStyles = makeStyles(theme => ({
     image: { width: '100%', height: 400, objectFit: 'contain' },
@@ -16,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     underline: { fontWeight: 'bold', textDecoration: 'underline', color: '#FE9900' },
 }));
 
-export default function SingleBlog() {
+function SingleBlog({ setCurrentPageTitle }) {
     const classes = useStyles();
     const location = useLocation();
     const history = useHistory();
@@ -26,6 +28,7 @@ export default function SingleBlog() {
     const { author, date, description, image, link, title } = blog;
 
     useEffect(() => {
+        setCurrentPageTitle(`${location?.state?.title}`);
         location?.state?.title ? setBlog(location?.state) : history.push('/blogs');
 
         // eslint-disable-next-line
@@ -47,3 +50,4 @@ export default function SingleBlog() {
         </div>
     );
 }
+export default connect(state => state, { setCurrentPageTitle: AC.setCurrentPageTitle })(SingleBlog);

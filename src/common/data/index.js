@@ -59,3 +59,11 @@ export const vcernAdminRoles = [
     { title: 'Admin', value: 'basic' },
     { title: 'Super Admin', value: 'super-admin' },
 ];
+
+export const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+export const getRoles = {
+    admin: 'VCERN Admin',
+    organization: 'Organization',
+    member: 'Member',
+};

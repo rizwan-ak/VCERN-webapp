@@ -6,16 +6,9 @@ import VCERNTypography from '../common/elements/VCERNTypography';
 import { connect } from 'react-redux';
 import icons from '../common/icons';
 import DashboardHeader from '../common/DashboardHeader';
-import InputMask from 'react-input-mask';
-import VCERNModal from '../common/elements/VCERNModal';
-import VCERNTextField from '../common/elements/VCERNTextField';
-import VCERNAutocomplete from '../common/elements/VCERNAutocomplete';
 import constants from '../common/constants';
 import AC from '../redux/actions/actionCreater';
 import { getFormattedDate } from '../common/helper';
-import VCERNAvatar from '../common/elements/VCERNAvatar';
-
-import docsImage from '../common/assets/others/docsImage.png';
 import DocumentsList from '../common/DocumentsList';
 import { useLocation } from 'react-router-dom';
 
@@ -29,14 +22,17 @@ const useStyles = makeStyles(theme => ({
     docImage: { width: 125, height: 112.7 },
 }));
 
-function Profile({ currentUser, type }) {
+function Profile({ currentUser, type, setCurrentPageTitle }) {
     const classes = useStyles();
     const location = useLocation();
 
     const [state, setstate] = useState({});
 
     useEffect(() => {
+        setCurrentPageTitle(`Member Profile`);
         type === constants.USER_TYPE_MEMBER ? setstate(currentUser) : setstate(location.state.member);
+
+        // eslint-disable-next-line
     }, []);
 
     const tagline = `${state?.address?.city}, ${state?.address?.state}`;
@@ -99,4 +95,4 @@ function Profile({ currentUser, type }) {
         </Grid>
     );
 }
-export default connect(data => data, {})(Profile);
+export default connect(data => data, { setCurrentPageTitle: AC.setCurrentPageTitle })(Profile);

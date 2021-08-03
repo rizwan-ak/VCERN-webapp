@@ -1,6 +1,5 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 
 import VCERNButton from '../common/elements/VCERNButton';
 import VCERNTypography from '../common/elements/VCERNTypography';
@@ -34,6 +33,7 @@ import { getDateTime, timeDiffFromNow } from '../common/helper';
 import AC from '../redux/actions/actionCreater';
 import FileMessage from '../common/FileMessage';
 import constants from '../common/constants';
+import { getRoles } from '../common/data';
 
 const useStyles = makeStyles(theme => ({
     mainBox: { height: '80vh' },
@@ -76,9 +76,8 @@ const useStyles = makeStyles(theme => ({
     unreadBadge: { height: 10, width: 10, background: '#FE9900', borderRadius: 50 },
 }));
 
-function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
+function Tickets({ currentUser, type, getPreSignedLink, uploadFile, setCurrentPageTitle }) {
     const classes = useStyles();
-    const history = useHistory();
 
     const { _id, organization } = currentUser;
 
@@ -92,6 +91,8 @@ function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
 
     const { message, search, subject, newTicket } = state;
     useEffect(() => {
+        setCurrentPageTitle(`${getRoles[type]} Tickets`);
+
         join(type === constants.USER_TYPE_VCERN ? 'vcern_admin' : type, _id, organization);
         onJoin(
             val => setAllChats(val),
@@ -129,6 +130,8 @@ function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
             val => {},
         );
         return () => disconnectSocket();
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -138,10 +141,14 @@ function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
 
     useEffect(() => {
         setFilteredChats(allChats.filter(el => el.name.toLowerCase().includes(search.toLowerCase())));
+
+        // eslint-disable-next-line
     }, [search.length]);
 
     useEffect(() => {
         setCurrentChat(filteredChats.find(el => el._id === currentChatIdx));
+
+        // eslint-disable-next-line
     }, [currentChatIdx]);
 
     const handleOnChange = evt => {
@@ -158,7 +165,7 @@ function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
         const files = [...evt.target.files];
         files.map(el => {
             const { name, type } = el;
-            getPreSignedLink({ name, type }, url => uploadFile({ url, file: el, type }, () => handleSend('File Attached', [{ url: url.split('?')[0], fileType: type }])));
+            return getPreSignedLink({ name, type }, url => uploadFile({ url, file: el, type }, () => handleSend('File Attached', [{ url: url.split('?')[0], fileType: type }])));
         });
     };
 
@@ -240,7 +247,7 @@ function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
                     <div className={classes.messages} id="messages" style={{ height: !currentChat?.open ? 'calc(80vh - 250px)' : 'calc(80vh - 300px)' }}>
                         {currentChat?.messages?.map((el, idx) => (
                             <div key={idx}>
-                                {(type == constants.USER_TYPE_ORG ? el.from.message_type == constants.USER_TYPE_ORG : el.from.message_type == 'vcern_admin') ? (
+                                {(type === constants.USER_TYPE_ORG ? el.from.message_type === constants.USER_TYPE_ORG : el.from.message_type === 'vcern_admin') ? (
                                     <div className={classes.myMessageBox}>
                                         <VCERNAvatar src={el.from.image} className={classes.displayPicture} />
                                         {!el.files.length ? (
@@ -302,4 +309,4 @@ function Tickets({ currentUser, type, getPreSignedLink, uploadFile }) {
         </Grid>
     );
 }
-export default connect(state => state, { getPreSignedLink: AC.getPreSignedLink, uploadFile: AC.uploadFile })(Tickets);
+export default connect(state => state, { getPreSignedLink: AC.getPreSignedLink, uploadFile: AC.uploadFile, setCurrentPageTitle: AC.setCurrentPageTitle })(Tickets);

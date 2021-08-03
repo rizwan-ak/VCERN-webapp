@@ -7,6 +7,8 @@ import VCERNTypography from '../../common/elements/VCERNTypography';
 import { connect } from 'react-redux';
 import icons from '../../common/icons';
 import DashboardHeader from '../../common/DashboardHeader';
+import AC from '../../redux/actions/actionCreater';
+import { getRoles } from '../../common/data';
 
 const useStyles = makeStyles(theme => ({
     input: { margin: '5px 0' },
@@ -19,9 +21,15 @@ const useStyles = makeStyles(theme => ({
     goIcon: { cursor: 'pointer' },
 }));
 
-function Settings({}) {
+function Settings({ setCurrentPageTitle, type }) {
     const classes = useStyles();
     const history = useHistory();
+
+    useEffect(() => {
+        setCurrentPageTitle(`${getRoles[type]} Settings`);
+
+        // eslint-disable-next-line
+    }, []);
 
     return (
         <Grid container>
@@ -96,4 +104,4 @@ function Settings({}) {
         </Grid>
     );
 }
-export default connect(state => state, {})(Settings);
+export default connect(state => state, { setCurrentPageTitle: AC.setCurrentPageTitle })(Settings);

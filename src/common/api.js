@@ -538,6 +538,156 @@ const addDoc = async (data, token, onError) => {
     }
 };
 
+const fetchPaymentMethods = async (token, onError) => {
+    try {
+        const response = await api.get(`/member/paymentMethods/`, { headers: { 'auth-token': token } });
+        return response?.data;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const setDefaultCard = async (idx, token, onError) => {
+    try {
+        const response = await api.patch(`/member/paymentMethods/updateDefault`, { payment_method: idx }, { headers: { 'auth-token': token } });
+        return response?.data;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const addNewPaymentMethod = async (idx, token, onError) => {
+    try {
+        await api.post(`/member/paymentMethods/add`, { payment_method: idx }, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const removePaymentMethod = async (idx, token, onError) => {
+    try {
+        await api.delete(`/member/paymentMethods/delete/${idx}`, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchMembersPayments = async (month, year, token, onError) => {
+    try {
+        const response = await api.get(`/member/payments/${month}/${year}`, { headers: { 'auth-token': token } });
+        return response?.data?.charges;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchStats = async (id, type, token, onError) => {
+    try {
+        const response = await api.get(`/${type}/stats/${id}`, { headers: { 'auth-token': token } });
+        return response?.data;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const payEvent = async (id, token, onError) => {
+    try {
+        await api.post(`/pool/payForEvent/${id}`, {}, { headers: { 'auth-token': token } });
+        return true;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchPoolEvents = async (id, token, onError) => {
+    try {
+        const response = await api.get(`/pool/getEvents/${id}`, { headers: { 'auth-token': token } });
+        return response?.data?.events;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchPendingMembers = async (id, token, onError) => {
+    try {
+        const response = await api.get(`/organization/pending/${id}`, { headers: { 'auth-token': token } });
+        return response?.data?.result;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchOrganizationsPayments = async (id, month, year, token, onError) => {
+    try {
+        const response = await api.get(`/organization/payments/${id}/${month}/${year}`, { headers: { 'auth-token': token } });
+        return response?.data?.result;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchAllStats = async (token, onError) => {
+    try {
+        const response = await api.get(`/admin/stats/`, { headers: { 'auth-token': token } });
+        return response?.data;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchAllPendingMembers = async (token, onError) => {
+    try {
+        const response = await api.get(`/admin/pending/`, { headers: { 'auth-token': token } });
+        return response?.data?.result;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchPoolStats = async (token, onError) => {
+    try {
+        const response = await api.get(`/organization/getPoolsStats/`, { headers: { 'auth-token': token } });
+        return response?.data;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchOrganizationStats = async (token, onError) => {
+    try {
+        const response = await api.get(`/organization/getOrganizationsStats/`, { headers: { 'auth-token': token } });
+        return response?.data;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
+const fetchMembersDataByPool = async (id, token, onError) => {
+    try {
+        const response = await api.get(`/pool/getMembersByPool/${id}?limit=4`, { headers: { 'auth-token': token } });
+        return response?.data;
+    } catch (error) {
+        onError(error?.response.data);
+        return false;
+    }
+};
+
 const API = {
     login,
     userRegister,
@@ -577,6 +727,21 @@ const API = {
     updateBeneficiary,
     fetchDocs,
     addDoc,
+    fetchPaymentMethods,
+    setDefaultCard,
+    addNewPaymentMethod,
+    removePaymentMethod,
+    fetchMembersPayments,
+    fetchStats,
+    payEvent,
+    fetchPoolEvents,
+    fetchPendingMembers,
+    fetchOrganizationsPayments,
+    fetchAllStats,
+    fetchAllPendingMembers,
+    fetchPoolStats,
+    fetchOrganizationStats,
+    fetchMembersDataByPool,
 };
 
 export default API;

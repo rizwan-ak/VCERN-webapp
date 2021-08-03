@@ -23,3 +23,15 @@ export const getDateTime = time => {
 export const getFormattedDate = date => {
     return moment(date).format('D MMMM YYYY');
 };
+
+export const getCurrentMonth = () => {
+    return moment().get('month');
+};
+
+export const getYear = month => {
+    return moment().get('month') - month < 0 ? moment().get('year') - 1 : moment().get('year');
+};
+
+export const getYearsfromNow = date => {
+    return moment().get('years') - moment(date).get('years');
+};

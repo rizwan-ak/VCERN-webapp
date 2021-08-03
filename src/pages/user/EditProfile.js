@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     editIcon: { cursor: 'pointer', borderRadius: '50%', background: '#E9ECF6', height: 40, width: 40, display: 'flex', justifyContent: 'center', alignItems: 'center' },
 }));
 
-function EditProfile({ currentUser, setError, token, updateMember, updateBeneficiary }) {
+function EditProfile({ currentUser, setError, token, updateMember, updateBeneficiary, setCurrentPageTitle }) {
     const classes = useStyles();
 
     const [isPasswordLengthValid, setIsPasswordLengthValid] = useState(false);
@@ -86,7 +86,15 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
     const { city, state, apt, street_address } = address;
 
     useEffect(() => {
+        setCurrentPageTitle(`Edit Profile`);
+
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => {
         resetData();
+
+        // eslint-disable-next-line
     }, [currentUser]);
 
     const resetData = () => {
@@ -114,7 +122,6 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
     };
 
     const handleSubmit = type => {
-        console.log(`data`, data);
         if (!validateFields()) {
             type === 'beneficiary'
                 ? updateBeneficiary(data, token, () => {
@@ -370,4 +377,9 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
         </Grid>
     );
 }
-export default connect(data => data, { setError: AC.setError, updateMember: AC.updateMember, updateBeneficiary: AC.updateBeneficiary })(EditProfile);
+export default connect(data => data, {
+    setError: AC.setError,
+    updateMember: AC.updateMember,
+    updateBeneficiary: AC.updateBeneficiary,
+    setCurrentPageTitle: AC.setCurrentPageTitle,
+})(EditProfile);

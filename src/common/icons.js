@@ -47,6 +47,8 @@ import CodeIcon from '@material-ui/icons/Code';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+
 export const Attach = AttachFileIcon;
 export const Send = SendIcon;
 export const BackArrow = ArrowBackIosIcon;
@@ -98,6 +100,7 @@ const icons = {
     dollar: <MonetizationOnOutlinedIcon />,
     uploadDocs: <PostAddOutlinedIcon />,
     edit: <EditOutlinedIcon />,
+    delete: <DeleteForeverOutlinedIcon />,
 };
 
 export default icons;

@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     accBodyBox: { display: 'flex', flexDirection: 'column' },
 }));
 
-function AllPools({ fetchNewPoolRequests, token, respondToNewPoolRequest, type, fetchInvitations, joinPool }) {
+function AllPools({ fetchNewPoolRequests, token, respondToNewPoolRequest, type, fetchInvitations, joinPool, setCurrentPageTitle }) {
     const classes = useStyles();
 
     const [search, setSearch] = useState('');
@@ -42,17 +42,24 @@ function AllPools({ fetchNewPoolRequests, token, respondToNewPoolRequest, type, 
     const isMember = type === constants.USER_TYPE_MEMBER;
 
     useEffect(() => {
+        setCurrentPageTitle(`${type === 'admin' ? 'Pool Requests' : 'All Pools'}`);
         isMember ? fetchInvitations(token, setRequests) : fetchNewPoolRequests(token, setRequests);
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         isMember
             ? setFilteredRequests(requests.filter(el => el?.pool?.name.toLowerCase().includes(search.toLowerCase())))
             : setFilteredRequests(requests.filter(el => el?.name.toLowerCase().includes(search.toLowerCase())));
+
+        // eslint-disable-next-line
     }, [search.length]);
 
     useEffect(() => {
         setFilteredRequests(requests);
+
+        // eslint-disable-next-line
     }, [requests.length]);
 
     const handleSubmit = (pool_id, response) => {
@@ -71,8 +78,8 @@ function AllPools({ fetchNewPoolRequests, token, respondToNewPoolRequest, type, 
         joinPool(selectedInvitation?._id, token, () => {
             fetchInvitations(token, setRequests);
             setSuccessMessage(`Joined New Pool Successfully`);
+            setShowPaymentModal(false);
         });
-        setShowPaymentModal(false);
     };
 
     return (
@@ -189,4 +196,5 @@ export default connect(state => state, {
     respondToNewPoolRequest: AC.respondToNewPoolRequest,
     fetchInvitations: AC.fetchInvitations,
     joinPool: AC.joinPool,
+    setCurrentPageTitle: AC.setCurrentPageTitle,
 })(AllPools);

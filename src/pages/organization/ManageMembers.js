@@ -48,6 +48,7 @@ function Settings({
     inviteToJoinPool,
     removeOrganizationAdmin,
     removeMemberFromPool,
+    setCurrentPageTitle,
 }) {
     const classes = useStyles();
     const history = useHistory();
@@ -69,15 +70,21 @@ function Settings({
     const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
+        setCurrentPageTitle(`Manage Members`);
+
         fetchOrganizationAdmins(currentOrganization?._id, setAdmins);
         fetchMembersNotInPool(selectedPool?._id, token, setMembers);
         fetchPoolMembers(selectedPool?._id, token, setPoolMembers);
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         setFilteredMembers(
             members.filter(el => el?.first_name.toLowerCase().includes(searchAllMembers.toLowerCase()) || el?.last_name.toLowerCase().includes(searchAllMembers.toLowerCase())),
         );
+
+        // eslint-disable-next-line
     }, [searchAllMembers.length]);
 
     useEffect(() => {
@@ -86,6 +93,8 @@ function Settings({
 
     useEffect(() => {
         setFilteredPoolMembers(poolMembers.filter(el => el?.first_name.toLowerCase().includes(search.toLowerCase()) || el?.last_name.toLowerCase().includes(search.toLowerCase())));
+
+        // eslint-disable-next-line
     }, [search.length]);
 
     useEffect(() => {
@@ -210,7 +219,7 @@ function Settings({
                 {filteredPoolMembers.map((el, idx) => (
                     <div key={idx}>
                         <div className={classes.listItem}>
-                            <VCERNAvatar className={classes.image} onClick={() => history.push(`/member/${el?._id}`, { member: el })} />
+                            <VCERNAvatar className={classes.image} src={el?.image} onClick={() => history.push(`/member/${el?._id}`, { member: el })} />
                             <div className={classes.grow}>
                                 <VCERNTypography className={classes.boldText} variant="body1" value={`${el?.first_name} ${el?.last_name}`} />
                                 <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.dob)}`} customColor="#6F7F9F" />
@@ -235,7 +244,7 @@ function Settings({
                 {admins.map((el, idx) => (
                     <>
                         <div className={classes.listItem}>
-                            <VCERNAvatar className={classes.image} />
+                            <VCERNAvatar className={classes.image} src={el?.image} />
                             <div className={classes.grow}>
                                 <VCERNTypography className={classes.boldText} variant="body1" value={`${el?.first_name} ${el?.last_name}`} />
                                 <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.dob)}`} customColor="#6F7F9F" />
@@ -267,7 +276,7 @@ function Settings({
                     {filteredMembers.map((el, idx) => (
                         <>
                             <div className={classes.listItem}>
-                                <VCERNAvatar className={classes.image} />
+                                <VCERNAvatar className={classes.image} src={el?.image} />
                                 <div className={classes.grow}>
                                     <VCERNTypography className={classes.boldText} variant="body1" value={`${el?.first_name} ${el?.last_name}`} />
                                     <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.dob)}`} customColor="#6F7F9F" />
@@ -293,7 +302,7 @@ function Settings({
                     {filteredMembers.map((el, idx) => (
                         <>
                             <div className={classes.listItem}>
-                                <VCERNAvatar className={classes.image} />
+                                <VCERNAvatar className={classes.image} src={el?.image} />
                                 <div className={classes.grow}>
                                     <VCERNTypography className={classes.boldText} variant="body1" value={`${el?.first_name} ${el?.last_name}`} />
                                     <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.dob)}`} customColor="#6F7F9F" />
@@ -326,4 +335,5 @@ export default connect(state => state, {
     inviteToJoinPool: AC.inviteToJoinPool,
     removeOrganizationAdmin: AC.removeOrganizationAdmin,
     removeMemberFromPool: AC.removeMemberFromPool,
+    setCurrentPageTitle: AC.setCurrentPageTitle,
 })(Settings);

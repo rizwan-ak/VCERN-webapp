@@ -15,6 +15,7 @@ import { getDateTime, timeDiffFromNow } from '../common/helper';
 import AC from '../redux/actions/actionCreater';
 import FileMessage from '../common/FileMessage';
 import constants from '../common/constants';
+import { getRoles } from '../common/data';
 
 const useStyles = makeStyles(theme => ({
     mainBox: { height: '80vh' },
@@ -52,7 +53,7 @@ const useStyles = makeStyles(theme => ({
     unreadBadge: { height: 10, width: 10, background: '#FE9900', borderRadius: 50 },
 }));
 
-function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
+function Messages({ currentUser, type, getPreSignedLink, uploadFile, setCurrentPageTitle }) {
     const classes = useStyles();
 
     const { _id, organization } = currentUser;
@@ -66,6 +67,8 @@ function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
 
     const { message, search } = state;
     useEffect(() => {
+        setCurrentPageTitle(`${getRoles[type]} Messages`);
+
         join(type === constants.USER_TYPE_VCERN ? 'vcern_admin' : type, _id, organization);
         onJoin(
             val => setAllChats(val),
@@ -110,6 +113,8 @@ function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
         joinRoom(currentChat?._id);
         onMessageRecieved(val => setCurrentChat(prevChat => ({ ...prevChat, messages: [...prevChat.messages, val] })));
         return () => disconnectSocket();
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -119,10 +124,14 @@ function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
 
     useEffect(() => {
         setFilteredChats(allChats.filter(el => el.name.toLowerCase().includes(search.toLowerCase())));
+
+        // eslint-disable-next-line
     }, [search.length]);
 
     useEffect(() => {
         setCurrentChat(filteredChats.find(el => el._id === currentChatIdx));
+
+        // eslint-disable-next-line
     }, [currentChatIdx]);
 
     const handleOnChange = evt => {
@@ -139,7 +148,7 @@ function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
         const files = [...evt.target.files];
         files.map(el => {
             const { name, type } = el;
-            getPreSignedLink({ name, type }, url => uploadFile({ url, file: el, type }, () => handleSend('File Attached', [{ url: url.split('?')[0], fileType: type }])));
+            return getPreSignedLink({ name, type }, url => uploadFile({ url, file: el, type }, () => handleSend('File Attached', [{ url: url.split('?')[0], fileType: type }])));
         });
     };
 
@@ -191,9 +200,9 @@ function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
                         {currentChat?.messages?.map((el, idx) => (
                             <div key={idx}>
                                 {/* (type == constants.USER_TYPE_ORG ? el.from.message_type == constants.USER_TYPE_ORG : el.from.message_type == 'vcern_admin') */}
-                                {(type == constants.USER_TYPE_ORG && el.from.message_type == constants.USER_TYPE_ORG) ||
-                                (type == constants.USER_TYPE_MEMBER && el.from.message_type == constants.USER_TYPE_MEMBER) ||
-                                (type == constants.USER_TYPE_VCERN && el.from.message_type == 'vcern_admin') ? (
+                                {(type === constants.USER_TYPE_ORG && el.from.message_type === constants.USER_TYPE_ORG) ||
+                                (type === constants.USER_TYPE_MEMBER && el.from.message_type === constants.USER_TYPE_MEMBER) ||
+                                (type === constants.USER_TYPE_VCERN && el.from.message_type === 'vcern_admin') ? (
                                     <div className={classes.myMessageBox}>
                                         <VCERNAvatar src={el.from.image} className={classes.displayPicture} />
                                         {!el.files.length ? (
@@ -242,4 +251,4 @@ function Messages({ currentUser, type, getPreSignedLink, uploadFile }) {
         </Grid>
     );
 }
-export default connect(state => state, { getPreSignedLink: AC.getPreSignedLink, uploadFile: AC.uploadFile })(Messages);
+export default connect(state => state, { getPreSignedLink: AC.getPreSignedLink, uploadFile: AC.uploadFile, setCurrentPageTitle: AC.setCurrentPageTitle })(Messages);

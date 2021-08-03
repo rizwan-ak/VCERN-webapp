@@ -1,14 +1,18 @@
 import { Grid, makeStyles, Paper } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
+
+import VCERNButton from '../../common/elements/VCERNButton';
 
 import VCERNLineChart from '../../common/elements/VCERNLineChart';
 import VCERNPieChart from '../../common/elements/VCERNPieChart';
 import VCERNTypography from '../../common/elements/VCERNTypography';
 
 import { connect } from 'react-redux';
+import icons from '../../common/icons';
+import DashboardHeader from '../../common/DashboardHeader';
+import InfoCard from '../../common/InfoCard';
 import AC from '../../redux/actions/actionCreater';
-import OrganizationsList from '../../common/OrganizationsList';
-import { getRoles } from '../../common/data';
 
 const minHeight = 300;
 const useStyles = makeStyles(theme => ({
@@ -22,24 +26,29 @@ const useStyles = makeStyles(theme => ({
     inviteText: { fontWeight: 'bold', marginTop: 10 },
 }));
 
-function Dashboard({ token, type, fetchAllStats, fetchAllPendingMembers, setCurrentPageTitle }) {
+function Dashboard({ selectedPool, token, fetchStats, fetchPoolEvents, fetchPendingMembers, currentOrganization, setCurrentPageTitle }) {
     const classes = useStyles();
+    const history = useHistory();
 
     const [stats, setStats] = useState(null);
+    const [events, setEvents] = useState([]);
     const [pendingMembers, setPendingMembers] = useState([]);
 
-    useEffect(() => {}, []);
-
     useEffect(() => {
-        setCurrentPageTitle(`${getRoles[type]} Dashboard`);
-        fetchAllStats(token, setStats);
-        fetchAllPendingMembers(token, setPendingMembers);
+        setCurrentPageTitle(`${currentOrganization?.name}`);
+        fetchPendingMembers(currentOrganization?._id, token, setPendingMembers);
 
         // eslint-disable-next-line
     }, []);
 
+    useEffect(() => {
+        fetchStats(selectedPool?._id, 'organization', token, setStats);
+        fetchPoolEvents(selectedPool?._id, token, setEvents);
+    }, [selectedPool]);
+
     return (
         <Grid container spacing={3}>
+            <DashboardHeader />
             <Grid item xs={12} md={6}>
                 <Paper className={classes.paper}>
                     <VCERNTypography variant="body1" className={classes.graphText} value={`Total Members: ${stats?.number_of_members}`} />
@@ -59,6 +68,7 @@ function Dashboard({ token, type, fetchAllStats, fetchAllPendingMembers, setCurr
                         data={[
                             { name: 'Raised', value: stats?.total_money, color: '#07A7E3' },
                             { name: 'Delinquent', value: stats?.delinquent, color: '#035ED9' },
+                            { name: 'Balance', value: stats?.current_event_money, color: '#FE9900' },
                         ]}
                     />
                 </Paper>
@@ -69,12 +79,26 @@ function Dashboard({ token, type, fetchAllStats, fetchAllPendingMembers, setCurr
                     <VCERNLineChart data={pendingMembers} />
                 </Paper>
             </Grid>
-            <Grid item xs={12}>
-                <OrganizationsList />
-            </Grid>
+
+            {!!events.length && (
+                <>
+                    <VCERNTypography variant="h5" className={classes.inviteText} value="Events Info" />
+                    <Grid container spacing={3} style={{ margin: '20px 0' }}>
+                        {events.map((el, idx) => (
+                            <>{idx < 3 && <InfoCard key={idx} event={el} />}</>
+                        ))}
+                    </Grid>
+                    <Grid container spacing={3} style={{ margin: '0 0 20px 0', justifyContent: 'center' }}>
+                        <VCERNButton fullWidth startIcon={icons.eye} value="View All Events" onClick={() => history.push('/events', events)} />
+                    </Grid>
+                </>
+            )}
         </Grid>
     );
 }
-export default connect(state => state, { fetchAllStats: AC.fetchAllStats, fetchAllPendingMembers: AC.fetchAllPendingMembers, setCurrentPageTitle: AC.setCurrentPageTitle })(
-    Dashboard,
-);
+export default connect(state => state, {
+    fetchPoolEvents: AC.fetchPoolEvents,
+    fetchStats: AC.fetchStats,
+    fetchPendingMembers: AC.fetchPendingMembers,
+    setCurrentPageTitle: AC.setCurrentPageTitle,
+})(Dashboard);

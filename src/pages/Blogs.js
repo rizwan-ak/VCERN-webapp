@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     listHeader: { margin: '10px 0' },
 }));
 
-function Blogs({ type, fetchBlogs, token }) {
+function Blogs({ type, fetchBlogs, token, setCurrentPageTitle }) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -22,11 +22,16 @@ function Blogs({ type, fetchBlogs, token }) {
     const [filteredBlogs, setFilteredBlogs] = useState([]);
 
     useEffect(() => {
+        setCurrentPageTitle(`Articles`);
         fetchBlogs(token, setBlogs);
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         setFilteredBlogs(blogs.filter(el => el?.title.toLowerCase().includes(search.toLowerCase())));
+
+        // eslint-disable-next-line
     }, [search.length]);
 
     useEffect(() => {
@@ -74,4 +79,4 @@ function Blogs({ type, fetchBlogs, token }) {
     );
 }
 
-export default connect(state => state, { fetchBlogs: AC.fetchBlogs })(Blogs);
+export default connect(state => state, { fetchBlogs: AC.fetchBlogs, setCurrentPageTitle: AC.setCurrentPageTitle })(Blogs);

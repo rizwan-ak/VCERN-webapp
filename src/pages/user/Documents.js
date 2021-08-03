@@ -4,15 +4,7 @@ import React, { useEffect, useState } from 'react';
 import VCERNTypography from '../../common/elements/VCERNTypography';
 
 import { connect } from 'react-redux';
-import icons from '../../common/icons';
-import DashboardHeader from '../../common/DashboardHeader';
-import InputMask from 'react-input-mask';
-import VCERNModal from '../../common/elements/VCERNModal';
-import VCERNTextField from '../../common/elements/VCERNTextField';
-import VCERNAutocomplete from '../../common/elements/VCERNAutocomplete';
-import constants from '../../common/constants';
 import AC from '../../redux/actions/actionCreater';
-import { getFormattedDate } from '../../common/helper';
 import VCERNAvatar from '../../common/elements/VCERNAvatar';
 
 import docsImage from '../../common/assets/others/docsImage.png';
@@ -27,14 +19,18 @@ const useStyles = makeStyles(theme => ({
     link: { display: 'contents' },
 }));
 
-function Documents({ currentUser, fetchDocs, token, uploadFile, getPreSignedLink, addDoc }) {
+function Documents({ currentUser, fetchDocs, token, uploadFile, getPreSignedLink, addDoc, setCurrentPageTitle }) {
     const classes = useStyles();
 
     const [successMessage, setSuccessMessage] = useState(false);
     const [docs, setDocs] = useState([]);
 
     useEffect(() => {
+        setCurrentPageTitle(`Documents`);
+
         fetchDocs(currentUser?._id, token, setDocs);
+
+        // eslint-disable-next-line
     }, []);
 
     const handleAttachment = evt => {
@@ -85,4 +81,10 @@ function Documents({ currentUser, fetchDocs, token, uploadFile, getPreSignedLink
         </div>
     );
 }
-export default connect(data => data, { fetchDocs: AC.fetchDocs, uploadFile: AC.uploadFile, getPreSignedLink: AC.getPreSignedLink, addDoc: AC.addDoc })(Documents);
+export default connect(data => data, {
+    fetchDocs: AC.fetchDocs,
+    uploadFile: AC.uploadFile,
+    getPreSignedLink: AC.getPreSignedLink,
+    addDoc: AC.addDoc,
+    setCurrentPageTitle: AC.setCurrentPageTitle,
+})(Documents);

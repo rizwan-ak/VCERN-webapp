@@ -372,6 +372,145 @@ const addDoc = (data, token, callback) => {
     };
 };
 
+const fetchPaymentMethods = (token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchPaymentMethods(token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const setDefaultCard = (idx, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.setDefaultCard(idx, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const addNewPaymentMethod = (idx, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.addNewPaymentMethod(idx, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const removePaymentMethod = (idx, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.removePaymentMethod(idx, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchMembersPayments = (month, year, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchMembersPayments(month, year, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchStats = (id, type, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchStats(id, type, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const payEvent = (data, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.payEvent(data, token, error => dispatch(setError(error)));
+        result && callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchPoolEvents = (id, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchPoolEvents(id, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchPendingMembers = (id, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchPendingMembers(id, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchOrganizationsPayments = (id, month, year, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchOrganizationsPayments(id, month, year, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchAllStats = (token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchAllStats(token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchAllPendingMembers = (token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchAllPendingMembers(token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const setCurrentOrganization = payload => ({ type: constants.SET_CURRENT_ORGANIZATION, payload });
+
+const setCurrentPageTitle = payload => ({ type: constants.SET_CURRENT_PAGE_TITLE, payload });
+
+const fetchPoolStats = (token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchPoolStats(token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchOrganizationStats = (token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchOrganizationStats(token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
+const fetchMembersDataByPool = (id, token, callback) => {
+    return async dispatch => {
+        dispatch(setLoading(true));
+        const result = await API.fetchMembersDataByPool(id, token, error => dispatch(setError(error)));
+        if (result) callback(result);
+        dispatch(setLoading(false));
+    };
+};
+
 const AC = {
     login,
     setUserType,
@@ -414,6 +553,23 @@ const AC = {
     updateBeneficiary,
     fetchDocs,
     addDoc,
+    fetchPaymentMethods,
+    setDefaultCard,
+    addNewPaymentMethod,
+    removePaymentMethod,
+    fetchMembersPayments,
+    fetchStats,
+    payEvent,
+    fetchPoolEvents,
+    fetchPendingMembers,
+    fetchOrganizationsPayments,
+    fetchAllStats,
+    fetchAllPendingMembers,
+    setCurrentOrganization,
+    setCurrentPageTitle,
+    fetchPoolStats,
+    fetchOrganizationStats,
+    fetchMembersDataByPool,
 };
 
 export default AC;

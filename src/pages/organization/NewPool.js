@@ -1,4 +1,4 @@
-import { Checkbox, Grid, makeStyles, Paper } from '@material-ui/core';
+import { Checkbox, Grid, makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     remberMeContainer: { display: 'flex', alignItems: 'center', width: '100%' },
 }));
 
-function NewPool({ currentUser, requestNewPool, token }) {
+function NewPool({ currentUser, requestNewPool, token, setCurrentPageTitle }) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -37,6 +37,12 @@ function NewPool({ currentUser, requestNewPool, token }) {
         single_event: false,
     });
     const { name, description, start_date, end_date, time_limit, contribution, recurring_frequency, single_event } = data;
+
+    useEffect(() => {
+        setCurrentPageTitle(`Request New Pool`);
+
+        // eslint-disable-next-line
+    }, []);
 
     const handleOnChange = evt => {
         const { value, name } = evt.target;
@@ -101,4 +107,4 @@ function NewPool({ currentUser, requestNewPool, token }) {
         </Grid>
     );
 }
-export default connect(state => state, { requestNewPool: AC.requestNewPool })(NewPool);
+export default connect(state => state, { requestNewPool: AC.requestNewPool, setCurrentPageTitle: AC.setCurrentPageTitle })(NewPool);

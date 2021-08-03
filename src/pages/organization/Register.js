@@ -144,10 +144,6 @@ function OrganizationRegister({ register, type, setError, organizationSubscripti
         p1_last_name,
         p1_phone,
         p1_email,
-        p2_first_name,
-        p2_last_name,
-        p2_phone,
-        p2_email,
         agreedTerms,
     } = data;
 

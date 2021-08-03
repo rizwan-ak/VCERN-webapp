@@ -23,12 +23,14 @@ import AllPools from '../pages/AllPools';
 import Blogs from '../pages/Blogs';
 import SingleBlog from '../pages/SingleBlog';
 import Profile from '../pages/Profile';
+import Events from '../pages/Events';
 
 import UserRegister from '../pages/user/Register';
 import UserDashboard from '../pages/user/Dashboard';
 import UserSettings from '../pages/user/Settings';
 import UserEditProfile from '../pages/user/EditProfile';
 import UserDocuments from '../pages/user/Documents';
+import UserPayments from '../pages/user/Payments';
 
 import OrganizationRegister from '../pages/organization/Register';
 import OrganizationDashboard from '../pages/organization/Dashboard';
@@ -36,11 +38,14 @@ import NewPool from '../pages/organization/NewPool';
 import ManageGroups from '../pages/organization/ManageGroups';
 import OrganizationSettings from '../pages/organization/Settings';
 import OrganizationManageMembers from '../pages/organization/ManageMembers';
+import OrganizationPayments from '../pages/organization/Payments';
 
 import VCERNDashboard from '../pages/vcern/Dashboard';
 import VCERNManageOrganizations from '../pages/vcern/ManageOrganizations';
 import VCERNManageAdmins from '../pages/vcern/ManageAdmins';
 import VCERNAddBlog from '../pages/vcern/AddBlog';
+import VCERNSingleOrganization from '../pages/vcern/SingleOrganization';
+import VCERNPayments from '../pages/vcern/Payments';
 
 function Routes({ loading, type, error, token, setError, currentUser }) {
     const commonRoutes = [
@@ -62,6 +67,8 @@ function Routes({ loading, type, error, token, setError, currentUser }) {
         { path: '/edit-profile', component: UserEditProfile },
         { path: '/profile', component: Profile },
         { path: '/documents', component: UserDocuments },
+        { path: '/events', component: Events },
+        { path: '/payments', component: UserPayments },
     ];
 
     const organizationRoutes = [
@@ -75,6 +82,8 @@ function Routes({ loading, type, error, token, setError, currentUser }) {
         { path: '/settings', component: OrganizationSettings },
         { path: '/manage-members', component: OrganizationManageMembers },
         { path: '/member/:id', component: Profile },
+        { path: '/events', component: Events },
+        { path: '/payments', component: OrganizationPayments },
     ];
 
     const vcernRoutes = [
@@ -87,6 +96,10 @@ function Routes({ loading, type, error, token, setError, currentUser }) {
         { path: '/add-blog', component: VCERNAddBlog },
         { path: '/blogs', component: Blogs },
         { path: '/blog', component: SingleBlog },
+        { path: '/organization', component: VCERNSingleOrganization },
+        { path: '/payments', component: VCERNPayments },
+        { path: '/events', component: Events },
+        { path: '/organizations-history', component: OrganizationPayments },
     ];
 
     const RedirectToDashboard = ({ path, component }) => {
