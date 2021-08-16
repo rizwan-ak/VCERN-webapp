@@ -38,10 +38,10 @@ export default function PaymentAgreements() {
                     ))}
                 </ul>
 
-                <div className={classes.buttonBox}>
+                {/* <div className={classes.buttonBox}>
                     <VCERNButton fullWidth value="Decline" color="secondary" width="46%" onClick={() => history.push('/login')} />
                     <VCERNButton fullWidth value="Accept" width="46%" onClick={() => history.push('/login')} />
-                </div>
+                </div> */}
             </div>
         </div>
     );

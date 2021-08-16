@@ -38,13 +38,13 @@ export default function InfoCard({ event }) {
                     </div>
                 </div>
                 <div className={classes.detailsBox}>
-                    <VCERNTypography variant="body2" value="Day of Death:" className={classes.boldText} />
+                    <VCERNTypography variant="body2" value="Date of Death:" className={classes.boldText} />
                     <VCERNTypography variant="body2" value={getFormattedDate(date)} customColor="#6F7F9F" />
                     <div className={classes.divider} />
                     <VCERNTypography variant="body2" value="Place of Death:" className={classes.boldText} />
                     <VCERNTypography variant="body2" value={description} customColor="#6F7F9F" />
                     <div className={classes.divider} />
-                    <VCERNTypography variant="body2" value="Cause of death:" className={classes.boldText} />
+                    <VCERNTypography variant="body2" value="Cause of Death:" className={classes.boldText} />
                     <VCERNTypography variant="body2" value={title} customColor="#6F7F9F" />
                 </div>
             </Paper>

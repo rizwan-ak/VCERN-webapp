@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import AC from '../../redux/actions/actionCreater';
 import VCERNAlert from '../../common/elements/VCERNAlert';
 import { getRoles } from '../../common/data';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     input: { margin: '5px 0' },
@@ -27,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 function Settings({ currentOrganization, getPreSignedLink, uploadFile, customizeOrganization, token, type, setCurrentPageTitle }) {
     const classes = useStyles();
+    const history = useHistory();
 
     const [state, setState] = useState({ name: '', tagline: '', description: '', image: '', about_image: '', tempimage: '', tempabout_image: '' });
     const { name, tagline, description, image, about_image, setError, tempimage, tempabout_image } = state;
@@ -51,6 +53,8 @@ function Settings({ currentOrganization, getPreSignedLink, uploadFile, customize
         const file = evt.target.files[0];
         const fileName = evt.target.name;
 
+        if (file?.size > 5242880) return setError('You cannot uploade a file greater than 5MB.');
+
         if (file) {
             const { name, type } = file;
             getPreSignedLink({ name, type }, url =>
@@ -64,6 +68,9 @@ function Settings({ currentOrganization, getPreSignedLink, uploadFile, customize
         customizeOrganization(state, state?._id, token, () => {
             setState({ name: '', tagline: '', description: '', image: '', about_image: '', tempimage: '', tempabout_image: '' });
             setSuccessMessage(`Organization Updated Successfully`);
+            setTimeout(() => {
+                history.push('/dashboard');
+            }, 3000);
         });
     };
 

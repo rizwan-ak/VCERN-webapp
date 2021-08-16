@@ -18,6 +18,7 @@ import VCERNAlert from '../../common/elements/VCERNAlert';
 const useStyles = makeStyles(theme => ({
     input: { margin: '10px 0' },
     title: { margin: '15px 0', fontWeight: 'bold' },
+    subTitle: { margin: '15px 0 5px 0', fontWeight: 'bold' },
     main: { margin: '20px 0', width: '100%' },
     inline: { margin: '15px 0 15px 15px', display: 'flex' },
     icon: { marginRight: 15 },
@@ -47,8 +48,10 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
         newState: '',
         newCity: '',
         newPassword: '',
+        confirmPassword: '',
         newApt: '',
         newStreet: '',
+        newZip_code: '',
         b_first_name: '',
         b_last_name: '',
         b_email: '',
@@ -80,10 +83,11 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
         b_state,
         b_city,
         b_zip_code,
+        confirmPassword,
     } = data;
 
     const { phone, email, address, beneficiary } = currentUser;
-    const { city, state, apt, street_address } = address;
+    const { city, state, apt, street_address, zip_code } = address;
 
     useEffect(() => {
         setCurrentPageTitle(`Edit Profile`);
@@ -118,6 +122,7 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
             b_state: beneficiary.address.state,
             b_city: beneficiary.address.city,
             b_zip_code: beneficiary.address.zip_code,
+            confirmPassword: '',
         });
     };
 
@@ -145,6 +150,8 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
             (!newPassword || !isPasswordLengthValid || !isLowercaseIncludedInPassword || !isUppercaseIncludedInPassword || !isSpecialCharacterIncludedInPassword)
         ) {
             return setError('Password must be at least 8 characters with 1 upper case, 1 lower case, 1 number or special character.');
+        } else if (showEditPassword && !(confirmPassword === newPassword)) {
+            return setError('Password and Confirm Password must be same');
         } else if (showEditAddress && (!newStreet || !newCity || !newStreet || !newApt)) {
             return setError('Please enter all required fields.');
         } else if (
@@ -192,7 +199,7 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
                         <InputMask
                             maskChar=" "
                             value={newPhone}
-                            mask="(+1) 999 999 99 99"
+                            mask="(+1) 999 999 9999"
                             className={classes.input}
                             name="testasdf"
                             onChange={evt => setData({ ...data, newPhone: evt.target.value })}
@@ -224,7 +231,28 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
                         </div>
                     </div>
                     <VCERNModal title="Edit Password" open={showEditPassword} onClose={handleCloseModal} onConfirm={handleSubmit} buttonTittle="Update">
-                        <VCERNTextField autoFocus type="password" variant="outlined" icon={icons.password} value={newPassword} name="newPassword" onChange={handleChange} />
+                        <VCERNTypography className={classes.optionText} variant="body1" value="Password" />
+                        <VCERNTextField
+                            autoFocus
+                            type="password"
+                            variant="outlined"
+                            icon={icons.password}
+                            value={newPassword}
+                            name="newPassword"
+                            onChange={handleChange}
+                            className={classes.input}
+                        />
+
+                        <VCERNTypography className={classes.optionText} variant="body1" value="Confirm Password" />
+                        <VCERNTextField
+                            type="password"
+                            variant="outlined"
+                            icon={icons.password}
+                            value={confirmPassword}
+                            name="confirmPassword"
+                            onChange={handleChange}
+                            className={classes.input}
+                        />
                     </VCERNModal>
                 </div>
 
@@ -237,35 +265,41 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
                         </div>
                     </div>
                     <VCERNModal title="Edit Address" open={showEditAddress} onClose={handleCloseModal} onConfirm={handleSubmit} buttonTittle="Update">
-                        <VCERNAutocomplete
-                            variant="outlined"
-                            value={newState}
-                            placeholder="State *"
-                            icon={icons.state}
-                            options={statesList}
-                            className={classes.input}
-                            onChange={(evt, val) => setData({ ...data, newState: val })}
-                        />
-                        <VCERNAutocomplete
-                            variant="outlined"
-                            disabled={!newState}
-                            placeholder="City/Town *"
-                            value={newCity}
-                            icon={icons.city}
-                            options={citiesList(newState)}
-                            className={classes.input}
-                            onChange={(evt, val) => setData({ ...data, newCity: val })}
-                        />
+                        <VCERNTypography className={classes.subTitle} variant="body1" value="Street Address" />
+                        <VCERNTextField placeholder="Street Address" variant="outlined" icon={icons.street} value={newStreet} name="newStreet" onChange={handleChange} />
+
+                        <VCERNTypography className={classes.subTitle} variant="body1" value="APT/STE/FL/P.O BOX ETC (Optional) " />
                         <VCERNTextField className={classes.input} placeholder="apt" variant="outlined" icon={icons.apt} value={newApt} name="newApt" onChange={handleChange} />
-                        <VCERNTextField
-                            className={classes.input}
-                            placeholder="Street Address"
-                            variant="outlined"
-                            icon={icons.street}
-                            value={newStreet}
-                            name="newStreet"
-                            onChange={handleChange}
-                        />
+
+                        <VCERNTypography className={classes.subTitle} variant="body1" value="State" />
+                        <div className={classes.input}>
+                            <VCERNAutocomplete
+                                variant="outlined"
+                                value={newState}
+                                placeholder="State *"
+                                icon={icons.state}
+                                options={statesList}
+                                onChange={(evt, val) => setData({ ...data, newState: val })}
+                            />
+                        </div>
+
+                        <VCERNTypography className={classes.subTitle} variant="body1" value="City" />
+                        <div className={classes.input}>
+                            <VCERNAutocomplete
+                                variant="outlined"
+                                disabled={!newState}
+                                placeholder="City/Town *"
+                                value={newCity}
+                                icon={icons.city}
+                                options={citiesList(newState)}
+                                onChange={(evt, val) => setData({ ...data, newCity: val })}
+                            />
+                        </div>
+
+                        <VCERNTypography className={classes.subTitle} variant="body1" value="Zip Code" />
+                        <InputMask mask="99999-9999" className={classes.input} value={zip_code} onChange={c => setData({ ...data, newZip_code: c.target.value })} maskChar={null}>
+                            {() => <VCERNTextField variant="outlined" placeholder="Zip Code *" icon={icons.zip} />}
+                        </InputMask>
                     </VCERNModal>
                 </div>
 
@@ -321,7 +355,7 @@ function EditProfile({ currentUser, setError, token, updateMember, updateBenefic
                             name="b_dob"
                             onChange={handleChange}
                         />
-                        <InputMask mask="(+1) 999 999 99 99" className={classes.input} value={b_phone} onChange={c => setData({ ...data, b_phone: c.target.value })} maskChar=" ">
+                        <InputMask mask="(+1) 999 999 9999" className={classes.input} value={b_phone} onChange={c => setData({ ...data, b_phone: c.target.value })} maskChar=" ">
                             {() => <VCERNTextField variant="outlined" placeholder="Phone Number *" icon={icons.phone} />}
                         </InputMask>
 

@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({
 
     buttonBox: { width: '100%', textAlign: 'center' },
     inviteText: { fontWeight: 'bold', marginTop: 10 },
+    inline: { display: 'flex', alignItems: 'center', marginTop: 20 },
 }));
 
 function Dashboard({ selectedPool, token, type, fetchStats, fetchPoolEvents, fetchPendingMembers, currentOrganization, setCurrentPageTitle }) {
@@ -78,6 +79,15 @@ function Dashboard({ selectedPool, token, type, fetchStats, fetchPoolEvents, fet
                     <VCERNTypography variant="body1" className={classes.graphText} value="Waiting Pool status" />
                     <VCERNLineChart data={pendingMembers} />
                 </Paper>
+            </Grid>
+            <Grid item xs={12}>
+                <VCERNTypography variant="h5" className={classes.inviteText} value="Pool Management" />
+                <div className={classes.inline}>
+                    <div style={{ marginRight: 25 }}>
+                        <VCERNButton fullWidth startIcon={icons.requests} value="Request New Pool " onClick={() => history.push('/new-pool')} />
+                    </div>
+                    <VCERNButton fullWidth startIcon={icons.eye} background="#FE9900" value="View Existing Pool(s)" onClick={() => history.push('/select-pool')} />
+                </div>
             </Grid>
 
             {!!events.length && (

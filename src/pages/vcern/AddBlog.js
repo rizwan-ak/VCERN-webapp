@@ -44,6 +44,9 @@ function AddBlog({ getPreSignedLink, uploadFile, addBlog, token, setError, setCu
 
     const handleAttachment = evt => {
         const file = evt.target.files[0];
+
+        if (file?.size > 5242880) return setError('You cannot uploade a file greater than 5MB.');
+
         if (file) {
             const { name, type } = file;
             getPreSignedLink({ name, type }, url => uploadFile({ url, file, type }, () => setState({ ...state, tempImage: URL.createObjectURL(file), image: url.split('?')[0] })));

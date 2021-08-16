@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     underline: { fontWeight: 'bold', margin: '20px 0', textDecoration: 'underline', cursor: 'pointer' },
     card: { borderBottom: '2px solid #07A7E3', paddingBottom: 5, margin: '20px 10px' },
 }));
-function PaymentModal({ title, open, onClose, onConfirm, setError }) {
+function PaymentModal({ title, open, onClose, onConfirm, setError, userSubscriptionPrice, currentOrganization }) {
     const classes = useStyles();
     const history = useHistory();
     const stripe = useStripe();
@@ -54,13 +54,12 @@ function PaymentModal({ title, open, onClose, onConfirm, setError }) {
             </div>
             <Divider variant="fullWidth" className={classes.divider} />
             <VCERNTypography value="Summary" variant="h6" className={classes.boldText} />
-            <VCERNTypography value="Once a year, you will be charged $19.99  membership fee by vCERN." variant="body2" className={classes.boldText} />
-            <VCERNTypography variant="body2" className={classes.boldText}>
+            <VCERNTypography value={`Once a year, you will be charged a $${userSubscriptionPrice}  membership fee by vCERN.`} variant="body2" />
+            <VCERNTypography variant="body2">
                 Additionally,
-                <VCERNTypography variant="body2" color="primary" component="span" value={' userSubscriptionPrice '} />
-                will charge you
-                <VCERNTypography variant="body2" color="primary" component="span" value={' userSubscriptionPrice '} />
-                for your contribution every time someone passes away.
+                <VCERNTypography variant="body2" color="primary" component="span" value={` ${currentOrganization?.name} `} />
+                will collect a contribution from you every time someone passes away in this pool. This contribution is determined by dividng the payout amount by the number of
+                people in this pool.
             </VCERNTypography>
             <VCERNTypography value=" Your beneficiary will collect $20,000 in the event of your passing." variant="body1" className={classes.boldText} />
             <Divider variant="fullWidth" className={classes.divider} />
@@ -96,7 +95,7 @@ function PaymentModal({ title, open, onClose, onConfirm, setError }) {
                     <div className={classes.remberMeContainer}>
                         <Checkbox color="secondary" value={agreedTerms} checked={agreedTerms} onChange={evt => setAgreedTerms(evt.target.checked)} />
                         <VCERNTypography variant="body1" className={classes.boldText}>
-                            I agree with All{' '}
+                            By checking this box, you agree to the{' '}
                             <VCERNTypography
                                 variant="body1"
                                 color="secondary"
@@ -111,7 +110,7 @@ function PaymentModal({ title, open, onClose, onConfirm, setError }) {
                                 component="span"
                                 color="secondary"
                                 className={classes.underline}
-                                value="Payment agreements"
+                                value="Privacy Policy"
                                 onClick={() => history.push('/payment-agreements')}
                             />
                         </VCERNTypography>

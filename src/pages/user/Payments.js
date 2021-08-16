@@ -35,7 +35,19 @@ const useStyles = makeStyles(theme => ({
     defaultButton: { marginRight: 25 },
 }));
 
-function Payments({ setError, fetchPaymentMethods, token, setDefaultCard, addNewPaymentMethod, removePaymentMethod, fetchMembersPayments, type, setCurrentPageTitle }) {
+function Payments({
+    setError,
+    fetchPaymentMethods,
+    token,
+    setDefaultCard,
+    addNewPaymentMethod,
+    removePaymentMethod,
+    fetchMembersPayments,
+    type,
+    setCurrentPageTitle,
+    currentOrganization,
+    userSubscriptionPrice,
+}) {
     const classes = useStyles();
     const history = useHistory();
     const stripe = useStripe();
@@ -151,13 +163,12 @@ function Payments({ setError, fetchPaymentMethods, token, setDefaultCard, addNew
             {selectedCard === 999 && (
                 <div>
                     <VCERNTypography value="Summary" variant="h6" className={classes.boldText} />
-                    <VCERNTypography value="Once a year, you will be charged $19.99 membership fee by vCERN." variant="body2" className={classes.boldText} />
-                    <VCERNTypography variant="body2" className={classes.boldText}>
+                    <VCERNTypography value={`Once a year, you will be charged a $${userSubscriptionPrice}  membership fee by vCERN.`} variant="body2" />
+                    <VCERNTypography variant="body2">
                         Additionally,
-                        <VCERNTypography variant="body2" color="primary" component="span" value={' userSubscriptionPrice '} />
-                        will charge you
-                        <VCERNTypography variant="body2" color="primary" component="span" value={' userSubscriptionPrice '} />
-                        for your contribution every time someone passes away.
+                        <VCERNTypography variant="body2" color="primary" component="span" value={` ${currentOrganization?.name} `} />
+                        will collect a contribution from you every time someone passes away in this pool. This contribution is determined by dividng the payout amount by the number
+                        of people in this pool.
                     </VCERNTypography>
                     <VCERNTypography value=" Your beneficiary will collect $20,000 in the event of your passing." variant="body1" className={classes.boldText} />
                     <CardElement
@@ -179,7 +190,7 @@ function Payments({ setError, fetchPaymentMethods, token, setDefaultCard, addNew
                     <div className={classes.remberMeContainer}>
                         <Checkbox color="secondary" value={agreedTerms} checked={agreedTerms} onChange={evt => setAgreedTerms(evt.target.checked)} />
                         <VCERNTypography variant="body1" className={classes.boldText}>
-                            I agree with All{' '}
+                            By checking this box, you agree to the{' '}
                             <VCERNTypography
                                 variant="body1"
                                 color="secondary"
@@ -194,7 +205,7 @@ function Payments({ setError, fetchPaymentMethods, token, setDefaultCard, addNew
                                 component="span"
                                 color="secondary"
                                 className={classes.underline}
-                                value="Payment agreements"
+                                value="Privacy Policy"
                                 onClick={() => history.push('/payment-agreements')}
                             />
                         </VCERNTypography>

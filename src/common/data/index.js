@@ -25,6 +25,13 @@ export const tosList = [
 
 export const contributionFequencyList = ['Yearly', 'Monthly', 'Weekly', 'Daily'];
 
+export const formatContributionFequency = {
+    Yearly: 'year',
+    Monthly: 'month',
+    Weekly: 'week',
+    Daily: 'day',
+};
+
 export const MembersMenu = [
     { title: 'Dashboard', href: 'dashboard', icon: icons.dashboard },
     { title: 'Messages', href: 'messages', icon: icons.messages },

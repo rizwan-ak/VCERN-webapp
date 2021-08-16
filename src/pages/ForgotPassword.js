@@ -53,10 +53,10 @@ function ForgotPassword({ forgotPassword, type }) {
                             <VCERNTypography className={classes.text} align="center" variant="h4" value="Forgot Password" />
                             <VCERNTypography className={classes.text} align="center" variant="h5" value="Get verified, Stay safe!" />
                             <VCERNTypography
-                                className={classes.text}
+                                customColor="#657285"
                                 align="center"
                                 variant="body1"
-                                value="Enter the email Address or Phone number associated with your accout We will send you a 4 digit code to reset your password."
+                                value="Enter the email address or phone number associated with your accout and we will send you a 4 digit code to reset your password"
                             />
 
                             <VCERNTextField label="Email" icon={icons.email} className={classes.input} value={email} name="email" onChange={evt => setEmail(evt.target.value)} />

@@ -26,7 +26,7 @@ function Documents({ currentUser, fetchDocs, token, uploadFile, getPreSignedLink
     const [docs, setDocs] = useState([]);
 
     useEffect(() => {
-        setCurrentPageTitle(`Documents`);
+        setCurrentPageTitle(`Verification Documents`);
 
         fetchDocs(currentUser?._id, token, setDocs);
 
@@ -56,15 +56,15 @@ function Documents({ currentUser, fetchDocs, token, uploadFile, getPreSignedLink
             <Grid container spacing={3}>
                 <Grid item sm={6} md={3} lg={2}>
                     <label htmlFor="upload-photo" className={classes.link}>
-                        <VCERNAvatar className={classes.docImage} variant="rounded" src={profileImage} />
-                    </label>
-                    <input id="upload-photo" type="file" name="id" accept="image/*" style={{ display: 'none' }} onChange={handleAttachment} />
-                </Grid>
-                <Grid item sm={6} md={3} lg={2}>
-                    <label htmlFor="upload-photo" className={classes.link}>
                         <VCERNAvatar className={classes.docImage} variant="rounded" src={idImage} />
                     </label>
                     <input id="upload-photo" type="file" name="image" accept="image/*" style={{ display: 'none' }} onChange={handleAttachment} />
+                </Grid>
+                <Grid item sm={6} md={3} lg={2}>
+                    <label htmlFor="upload-photo" className={classes.link}>
+                        <VCERNAvatar className={classes.docImage} variant="rounded" src={profileImage} />
+                    </label>
+                    <input id="upload-photo" type="file" name="id" accept="image/*" style={{ display: 'none' }} onChange={handleAttachment} />
                 </Grid>
                 <Grid item sm={6} md={3} lg={2}>
                     <label htmlFor="upload-docs" className={classes.link}>
@@ -74,7 +74,7 @@ function Documents({ currentUser, fetchDocs, token, uploadFile, getPreSignedLink
                 </Grid>
             </Grid>
 
-            <VCERNTypography className={classes.title} variant="h6" value="Documents" />
+            <VCERNTypography className={classes.title} variant="h6" value="View all uploaded documents" />
             <DocumentsList docs={docs} />
 
             <VCERNAlert message={successMessage} onClose={() => setSuccessMessage(false)} success={true} />

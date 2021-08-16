@@ -2,6 +2,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 
 import VCERNTypography from '../common/elements/VCERNTypography';
+import VCERNButton from '../common/elements/VCERNButton';
 
 import { connect } from 'react-redux';
 import icons from '../common/icons';
@@ -22,11 +23,12 @@ const useStyles = makeStyles(theme => ({
     docImage: { width: 125, height: 112.7 },
 }));
 
-function Profile({ currentUser, type, setCurrentPageTitle }) {
+function Profile({ currentUser, type, setCurrentPageTitle, fetchDocs, token }) {
     const classes = useStyles();
     const location = useLocation();
 
     const [state, setstate] = useState({});
+    const [docs, setDocs] = useState([]);
 
     useEffect(() => {
         setCurrentPageTitle(`Member Profile`);
@@ -34,6 +36,12 @@ function Profile({ currentUser, type, setCurrentPageTitle }) {
 
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        state?._id && fetchDocs(state?._id, token, setDocs);
+
+        // eslint-disable-next-line
+    }, [state]);
 
     const tagline = `${state?.address?.city}, ${state?.address?.state}`;
     const name = `${state?.first_name} ${state?.last_name}`;
@@ -49,7 +57,7 @@ function Profile({ currentUser, type, setCurrentPageTitle }) {
 
     return (
         <Grid container>
-            <DashboardHeader title={name} subTitle={tagline} />
+            <DashboardHeader title={name} subTitle={tagline} id={state?._id} />
             <div className={classes.main}>
                 <div>
                     <VCERNTypography className={classes.title} variant="h6" value="Personal Info" />
@@ -85,14 +93,19 @@ function Profile({ currentUser, type, setCurrentPageTitle }) {
                         <div className={classes.icon}>{icons.state}</div>
                         <VCERNTypography className={classes.boldText} variant="body1" value={bAddress} />
                     </div>
+
+                    {state?.beneficiary?.email && <VCERNButton href={`mailto:${state?.beneficiary?.email}`} startIcon={icons.email} value="Contact Beneficiary" align="left" />}
+                    {/* <a href={state?.beneficiary?.email} target="_blank" rel="noreferrer">
+                            Contact Beneficiary
+                        </a> */}
                 </div>
 
                 <div>
                     <VCERNTypography className={classes.title} variant="h6" value="Documents" />
-                    <DocumentsList docs={[1, 1, 1, 1, 1, 1]} />
+                    <DocumentsList docs={docs} />
                 </div>
             </div>
         </Grid>
     );
 }
-export default connect(data => data, { setCurrentPageTitle: AC.setCurrentPageTitle })(Profile);
+export default connect(data => data, { setCurrentPageTitle: AC.setCurrentPageTitle, fetchDocs: AC.fetchDocs })(Profile);

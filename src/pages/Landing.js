@@ -35,9 +35,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
 
-    logo: { height: 150, width: 300 },
-    logoText: { padding: '10px 0 40px 0' },
-    title: { padding: '30px 0' },
+    logo: { height: 80, width: 180 },
+    logoText: { padding: '10px 0 80px 0' },
+    title: { padding: '40px 0 10px 0' },
 
     borderedButton: { border: '1px solid #07A7E3' },
     tickIcon: { fontSize: 10, marginRight: 10, padding: 0, border: '3px solid #07A7E3', borderRadius: 50, fontWeight: 'bold', color: 'white' },
@@ -62,7 +62,7 @@ function Landing({ setUserType }) {
             <Grid item xs={12} sm={8} md={6} component={Paper} className={classes.paper}>
                 <div className={classes.container}>
                     <img src={logo} alt="logo" className={classes.logo} />
-                    <VCERNTypography align="center" variant="h5" color="secondary" className={classes.logoText} value="The Best Alternative to Life Insurance." />
+                    <VCERNTypography align="center" variant="h6" color="secondary" className={classes.logoText} value="The Best Alternative to Life Insurance." />
                     <VCERNTypography align="center" variant="h6" className={classes.title} value="Login/Register?" />
 
                     <div className={classes.inline}>

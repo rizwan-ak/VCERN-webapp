@@ -181,7 +181,7 @@ function ManageAdmins({ fetchAdmins, token, addVcernAdmin, setError, toggleVcern
                 <InputMask
                     maskChar=" "
                     value={phone}
-                    mask="(+1) 999 999 99 99"
+                    mask="(+1) 999 999 9999"
                     className={classes.input}
                     name="testasdf"
                     onChange={evt => setState({ ...state, phone: evt.target.value })}

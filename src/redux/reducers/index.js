@@ -21,7 +21,7 @@ const Reducer = (state = initialState, { type, payload }) => {
                 ...state,
                 currentUser: payload?.user || state.currentUser,
                 token: payload?.token ?? state.token,
-                currentOrganization: payload.organization || null,
+                currentOrganization: payload.organization || state.currentOrganization,
                 loading: false,
                 error: null,
             };

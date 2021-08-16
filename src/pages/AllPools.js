@@ -17,6 +17,7 @@ import AC from '../redux/actions/actionCreater';
 import VCERNAlert from '../common/elements/VCERNAlert';
 import constants from '../common/constants';
 import PaymentModal from '../common/PaymentModal';
+import { getFormattedDate } from '../common/helper';
 
 const useStyles = makeStyles(theme => ({
     root: { width: '100%' },
@@ -116,7 +117,7 @@ function AllPools({ fetchNewPoolRequests, token, respondToNewPoolRequest, type, 
                               </AccordionSummary>
                               <AccordionDetails className={classes.accBodyBox}>
                                   <VCERNTypography variant="body1" className={classes.text}>
-                                      Date: <VCERNTypography variant="body2" component="span" value={el?.pool?.start_date} customColor="#6F7F9F" /> -{' '}
+                                      Date: <VCERNTypography variant="body2" component="span" value={getFormattedDate(el?.pool?.start_date)} customColor="#6F7F9F" /> -{' '}
                                       <VCERNTypography
                                           variant="body2"
                                           component="span"
@@ -158,7 +159,7 @@ function AllPools({ fetchNewPoolRequests, token, respondToNewPoolRequest, type, 
                               </AccordionSummary>
                               <AccordionDetails className={classes.accBodyBox}>
                                   <VCERNTypography variant="body1" className={classes.text}>
-                                      Date: <VCERNTypography variant="body2" component="span" value={el?.start_date} customColor="#6F7F9F" /> -{' '}
+                                      Date: <VCERNTypography variant="body2" component="span" value={getFormattedDate(el?.start_date)} customColor="#6F7F9F" /> -{' '}
                                       <VCERNTypography variant="body2" component="span" value={!el?.time_limit ? 'No Time Limit' : el?.end_date} customColor="#6F7F9F" />
                                   </VCERNTypography>
                                   <VCERNTypography variant="body1" className={classes.text}>

@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 });
 
 export default function ImgMediaCard({ blog }) {
-    const { image, title, date, description } = blog;
+    const { image, title, description } = blog;
     const classes = useStyles();
     const history = useHistory();
 
@@ -27,7 +27,6 @@ export default function ImgMediaCard({ blog }) {
             <CardActionArea>
                 <CardMedia component="img" alt="Blog Image" height="250" image={image} title={title} />
                 <CardContent>
-                    <VCERNTypography variant="caption" className={classes.boldText} value={getFormattedDate(date)} customColor="#657285" />
                     <VCERNTypography variant="h6" className={classes.title} value={title} />
                     <VCERNTypography variant="body2" className={classes.body} value={description} />
                 </CardContent>

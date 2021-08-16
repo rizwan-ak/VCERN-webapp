@@ -27,7 +27,10 @@ const useStyles = makeStyles(theme => ({
     // innerBox: { padding: '40px 50px', [theme.breakpoints.down('sm')]: { padding: 0 } },
     innerBox: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
     text: { margin: '20px 0', fontWeight: 'bold' },
+    boldText: { fontWeight: 'bold' },
     infoText: { cursor: 'pointer', textDecoration: 'underline' },
+
+    activeBox: { width: 'fit-content', padding: '10px 20px', margin: '0 auto', textAlign: 'center', [theme.breakpoints.down('sm')]: { padding: '10px 5px' } },
 
     hideOnSm: { [theme.breakpoints.down('sm')]: { display: 'none' } },
 
@@ -40,8 +43,8 @@ const useStyles = makeStyles(theme => ({
     graphText: { fontWeight: 'bold', marginBottom: 10, textAlign: 'center' },
 
     continueButton: { margin: '10px 0' },
-    aboutPic: { height: 375, width: '100%' },
-    aboutBody: { overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', '-webkit-line-clamp': 15, '-webkit-box-orient': 'vertical' },
+    aboutPic: { width: '100%', objectFit: 'contain' },
+    aboutBody: { overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', '-webkit-line-clamp': 10, '-webkit-box-orient': 'vertical' },
 }));
 
 function Dashboard({ type, token, fetchStats, selectedPool, fetchPoolEvents, currentOrganization, fetchBlogs, currentUser, setCurrentPageTitle }) {
@@ -53,7 +56,9 @@ function Dashboard({ type, token, fetchStats, selectedPool, fetchPoolEvents, cur
     const [blogs, setBlogs] = useState([]);
 
     const { about_image, description } = currentOrganization;
-    const { status } = currentUser;
+    const { status, first_name, last_name } = currentUser;
+
+    console.log(`currentUser`, currentUser);
 
     useEffect(() => {
         setCurrentPageTitle(`${getRoles[type]} Dashboard`);
@@ -68,11 +73,22 @@ function Dashboard({ type, token, fetchStats, selectedPool, fetchPoolEvents, cur
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
+                <VCERNTypography variant="body1" value={`Hi ${first_name} ${last_name},`} />
+                <VCERNTypography variant="h5" className={classes.boldText} value={`Welcome to the ${selectedPool?.name}!`} />
+            </Grid>
+            <Grid item xs={12}>
                 {status === 'active' ? (
-                    <VCERNTypography className={classes.text} variant="h5" align="center">
-                        Profile status:
-                        <VCERNTypography customColor="#05BD6A" value=" Active" />
-                    </VCERNTypography>
+                    <Paper className={classes.activeBox}>
+                        <VCERNTypography className={classes.text} variant="h5">
+                            Profile status:
+                            <VCERNTypography customColor="#05BD6A" value=" Active" />
+                        </VCERNTypography>
+                        <Divider />
+                        <VCERNTypography className={classes.text} variant="h6">
+                            Membership ID:
+                            <VCERNTypography value={` ${currentUser?._id}`} />
+                        </VCERNTypography>
+                    </Paper>
                 ) : (
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
@@ -100,7 +116,7 @@ function Dashboard({ type, token, fetchStats, selectedPool, fetchPoolEvents, cur
                 )}
             </Grid>
             <Grid item xs={12} md={6}>
-                <iframe title="video" width="100%" height="100%" src="https://www.youtube.com/embed/tgbNymZ7vqY" />
+                <iframe title="video" width="100%" height="100%" src="https://www.youtube.com/embed/tgbNymZ7vqY" allow="fullscreen;" />
             </Grid>
             <Grid item xs={12} md={6}>
                 {status === 'active' ? (
@@ -149,9 +165,9 @@ function Dashboard({ type, token, fetchStats, selectedPool, fetchPoolEvents, cur
             <Grid item xs={12} md={6}>
                 <Paper className={classes.inviteBox}>
                     <img src={giftPic} alt="invite" className={classes.invitePic} />
-                    <VCERNTypography className={classes.inviteText} variant="h5" value="Get $10" />
-                    <VCERNTypography className={classes.inviteText} variant="body2" value="You’ll both get $10 in free When your friend Join in the pool" customColor="#6F7F9F" />
+                    <VCERNTypography className={classes.inviteText} variant="h5" value="Get $5" />
                     <VCERNTypography className={classes.inviteText} variant="body1" value="Help your pool grow faster by inviting family and friends!" />
+                    <VCERNTypography variant="body2" value="Get $5  everytime someone you referred joins this pool" customColor="#6F7F9F" />
                     <VCERNButton fullWidth value="Invite" startIcon={icons.invite} className={classes.continueButton} />
                 </Paper>
             </Grid>
@@ -165,14 +181,14 @@ function Dashboard({ type, token, fetchStats, selectedPool, fetchPoolEvents, cur
                         ))}
                     </Grid>
                     <Grid container spacing={3} style={{ margin: '0 0 20px 0', justifyContent: 'center' }}>
-                        <VCERNButton fullWidth startIcon={icons.eye} value="View All Events" onClick={() => history.push('/events', events)} />
+                        <VCERNButton fullWidth startIcon={icons.eye} value={'View All Deaths'} onClick={() => history.push('/events', events)} />
                     </Grid>
                 </>
             )}
 
             {!!blogs.length && (
                 <>
-                    <VCERNTypography variant="h5" className={classes.inviteText} value="Blog / Articles" />
+                    <VCERNTypography variant="h5" className={classes.inviteText} value="Blogs / Articles" />
                     <Grid container spacing={3} style={{ margin: '20px 0' }}>
                         {blogs.map((el, idx) => (
                             <>
@@ -196,7 +212,7 @@ function Dashboard({ type, token, fetchStats, selectedPool, fetchPoolEvents, cur
                     <img src={about_image} alt="waiting" className={classes.aboutPic} />
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    <VCERNTypography variant="body1" customColor="#6F7F9F" value={description} className={classes.aboutBody} />
+                    <VCERNTypography variant="body1" value={description} className={classes.aboutBody} />
                 </Grid>
             </Grid>
         </Grid>

@@ -33,6 +33,8 @@ import { MembersMenu, vcernMenu, organizationsMenu } from './data';
 import PaymentModal from './PaymentModal';
 import VCERNAlert from './elements/VCERNAlert';
 
+import logoPic from './assets/logos/blue.png';
+
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
     root: { display: 'flex' },
@@ -84,7 +86,12 @@ const useStyles = makeStyles(theme => ({
     },
     appBarSpacer: theme.mixins.toolbar,
     content: { flexGrow: 1, height: '100vh', overflow: 'auto' },
-    container: { paddingTop: theme.spacing(4), paddingBottom: theme.spacing(4) },
+    container: {
+        padding: theme.spacing(20),
+        [theme.breakpoints.down('sm')]: { padding: theme.spacing(1) },
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
+    },
 
     boldText: { fontWeight: 'bold' },
     displayPicture: { height: 100, width: 100, marginBottom: 20, borderRadius: 50 },
@@ -97,7 +104,7 @@ const useStyles = makeStyles(theme => ({
     notificationTextBox: { display: 'flex', flexDirection: 'column' },
 }));
 
-function Header({ children, logout, currentUser, type, joinPool, token, payEvent, currentPageTitle }) {
+function Header({ children, logout, currentUser, type, joinPool, token, payEvent, currentPageTitle, currentOrganization }) {
     const classes = useStyles();
     const history = useHistory();
     const location = useLocation();
@@ -111,7 +118,7 @@ function Header({ children, logout, currentUser, type, joinPool, token, payEvent
 
     const [successMessage, setSuccessMessage] = useState(false);
 
-    const { image, first_name, last_name, _id, organization } = currentUser;
+    const { _id, organization } = currentUser;
 
     useEffect(() => {
         join(type === constants.USER_TYPE_VCERN ? 'vcern_admin' : type, _id, organization);
@@ -208,10 +215,20 @@ function Header({ children, logout, currentUser, type, joinPool, token, payEvent
                         <IconButton onClick={() => setOpen(false)}>{icons.right}</IconButton>
                     </div>
                     {open && (
-                        <div className={classes.infoBox}>
-                            <VCERNAvatar src={image} className={classes.displayPicture} alt={`${first_name} ${last_name}`} />
-                            <VCERNTypography variant="body2" className={classes.boldText} value="Cameroonian Association" />
-                        </div>
+                        <>
+                            {type === constants.USER_TYPE_VCERN ? (
+                                <div className={classes.infoBox}>
+                                    <VCERNAvatar src={logoPic} className={classes.displayPicture} alt={`VCERN Logo`} />
+                                    <VCERNTypography variant="h5" className={classes.boldText} value="vCERN" />
+                                    <VCERNTypography variant="caption" customColor="#FE9900" value="The Best Alternative to Life Insurance" />
+                                </div>
+                            ) : (
+                                <div className={classes.infoBox}>
+                                    <VCERNAvatar src={currentOrganization?.image} className={classes.displayPicture} alt={`Organizations Name`} />
+                                    <VCERNTypography variant="body2" className={classes.boldText} value={currentOrganization?.name} />
+                                </div>
+                            )}
+                        </>
                     )}
                     <Divider variant="middle" />
                     <List>

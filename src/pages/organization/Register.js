@@ -12,9 +12,6 @@ import VCERNTextField from '../../common/elements/VCERNTextField';
 import { Checkbox, Grid, Paper, Step, StepLabel, Stepper } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
-import { GoogleLogin } from 'react-google-login';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-
 import AC from '../../redux/actions/actionCreater';
 import { organizationSteps, statesList, citiesList } from '../../common/data';
 import VCERNAutocomplete from '../../common/elements/VCERNAutocomplete';
@@ -158,10 +155,6 @@ function OrganizationRegister({ register, type, setError, organizationSubscripti
         }
     };
 
-    const handleSocialAuth = response => {
-        console.log(response);
-    };
-
     const handleStep1Next = () => {
         if (
             !password ||
@@ -219,18 +212,13 @@ function OrganizationRegister({ register, type, setError, organizationSubscripti
                 ))}
             </Stepper>
 
-            <VCERNTypography
-                variant="body2"
-                className={classes.text}
-                value="Enter you name as it appears in your ID or official document. 
-To complete registration, please have beneficiary contact information and debit/credit card handy"
-            />
+            <VCERNTypography variant="body2" className={classes.text} value="Registrant Agent information" />
 
             <VCERNTextField label="First Name *" icon={icons.person} className={classes.input} value={first_name} name="first_name" onChange={handleOnChange} />
             <VCERNTextField label="Last Name *" icon={icons.person} className={classes.input} value={last_name} name="last_name" onChange={handleOnChange} />
             <VCERNTextField label="Email *" icon={icons.email} className={classes.input} value={email} name="email" onChange={handleOnChange} />
 
-            <InputMask mask="(+1) 999 999 99 99" className={classes.input} value={a_phone} onChange={c => setData({ ...data, a_phone: c.target.value })} maskChar=" ">
+            <InputMask mask="(+1) 999 999 9999" className={classes.input} value={a_phone} onChange={c => setData({ ...data, a_phone: c.target.value })} maskChar=" ">
                 {() => <VCERNTextField label="Phone Number *" icon={icons.phone} />}
             </InputMask>
 
@@ -261,39 +249,6 @@ To complete registration, please have beneficiary contact information and debit/
 
             <VCERNButton fullWidth value="Continue" className={classes.continueButton} onClick={handleStep1Next} />
 
-            <VCERNTypography variant="h4" align="center" className={classes.text} value="or" />
-
-            <GoogleLogin
-                clientId={process.env.REACT_APP_GOOGLE_AUTH_API}
-                onSuccess={handleSocialAuth}
-                onFailure={handleSocialAuth}
-                render={renderProps => (
-                    <VCERNButton
-                        fullWidth
-                        className={classes.continueButton}
-                        onClick={renderProps.onClick}
-                        background="#F44336"
-                        value="Continue with Google"
-                        startIcon={icons.facebook}
-                    />
-                )}
-            />
-
-            <FacebookLogin
-                appId={process.env.REACT_APP_FACEBOOK_AUTH_API}
-                callback={handleSocialAuth}
-                render={renderProps => (
-                    <VCERNButton
-                        fullWidth
-                        startIcon={icons.facebook}
-                        className={classes.continueButton}
-                        onClick={renderProps.onClick}
-                        background="#1873EB"
-                        value="Continue with Facebook"
-                    />
-                )}
-            />
-
             <VCERNTypography align="center" variant="body1">
                 You have already an accout?{' '}
                 <VCERNTypography component="span" variant="body1" color="secondary" className={classes.underline} value="LOGIN" onClick={() => history.push('/login')} />
@@ -317,7 +272,7 @@ To complete registration, please have beneficiary contact information and debit/
 
             <VCERNTextField label="Organization name *" icon={icons.person} className={classes.input} value={name} name="name" onChange={handleOnChange} />
 
-            <InputMask mask="(+1) 999 999 99 99" className={classes.input} value={phone} onChange={c => setData({ ...data, phone: c.target.value })} maskChar=" ">
+            <InputMask mask="(+1) 999 999 9999" className={classes.input} value={phone} onChange={c => setData({ ...data, phone: c.target.value })} maskChar=" ">
                 {() => <VCERNTextField label="Organizaton Phone Number *" icon={icons.phone} />}
             </InputMask>
 
@@ -386,7 +341,7 @@ To complete registration, please have beneficiary contact information and debit/
             <VCERNTextField label="Last Name" icon={icons.person} className={classes.input} value={p1_last_name} name="p1_last_name" onChange={handleOnChange} />
             <VCERNTextField label="Email" icon={icons.email} className={classes.input} value={p1_email} name="p1_email" onChange={handleOnChange} />
 
-            <InputMask mask="(+1) 999 999 99 99" className={classes.input} value={p1_phone} onChange={c => setData({ ...data, p1_phone: c.target.value })} maskChar=" ">
+            <InputMask mask="(+1) 999 999 9999" className={classes.input} value={p1_phone} onChange={c => setData({ ...data, p1_phone: c.target.value })} maskChar=" ">
                 {() => <VCERNTextField label="Phone Number *" icon={icons.phone} />}
             </InputMask>
 
@@ -432,8 +387,6 @@ To complete registration, please have beneficiary contact information and debit/
                 ))}
             </Stepper>
 
-            <VCERNTypography variant="body2" className={classes.text} value="To complete registration, please have beneficiary contact information and debit/credit card handy" />
-
             <div className={classes.inline}>
                 <VCERNTypography variant="body1" className={classes.text} value="Credit/Debit Card" />
                 <img src={cardsPic} alt="cards" className={classes.cardsPic} />
@@ -441,10 +394,13 @@ To complete registration, please have beneficiary contact information and debit/
             <VCERNTypography variant="body1" className={classes.text} value="Summary" />
 
             <VCERNTypography variant="body1" className={classes.text}>
-                App Setup Fee: <VCERNTypography variant="body1" component="span" value={`$${organizationSubscriptionPrice}/yr`} />
+                Product: <VCERNTypography variant="body1" component="span" value={` App setup`} />
+            </VCERNTypography>
+            <VCERNTypography variant="body1" className={classes.text}>
+                Fee: <VCERNTypography variant="body1" component="span" value={`$${organizationSubscriptionPrice}`} />
             </VCERNTypography>
 
-            <VCERNTypography variant="body1" className={classes.text} value="You will be charged a one time fee of $399 by vCERN to setup your plateform." />
+            <VCERNTypography variant="body1" value="You will be charged  a one-time fee of $299 by vCERN to setup your mobile and web applications." />
 
             <CardElement
                 className={classes.card}
@@ -466,7 +422,7 @@ To complete registration, please have beneficiary contact information and debit/
             <div className={classes.remberMeContainer}>
                 <Checkbox color="secondary" value={agreedTerms} checked={agreedTerms} onChange={evt => setData({ ...data, agreedTerms: evt.target.checked })} />
                 <VCERNTypography variant="body1" className={classes.text}>
-                    I agree with All{' '}
+                    By checking this box, you agree to the{' '}
                     <VCERNTypography
                         variant="body1"
                         color="secondary"
@@ -481,7 +437,7 @@ To complete registration, please have beneficiary contact information and debit/
                         component="span"
                         color="secondary"
                         className={classes.underline}
-                        value="Payment agreements"
+                        value="Privacy Policy"
                         onClick={() => history.push('/payment-agreements')}
                     />
                 </VCERNTypography>

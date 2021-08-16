@@ -156,6 +156,7 @@ function Settings({
         });
     };
 
+    const isDefaultPool = selectedPool.name === 'default';
     return (
         <div>
             <VCERNTypography className={classes.boldText} variant="h6" value="Invite New Member" />
@@ -164,7 +165,7 @@ function Settings({
                     <div className={classes.inviteIcon}>{icons.text}</div>
                     <VCERNTypography className={classes.grow} variant="body1" value="Invite via text" />
                     <div className={classes.inviteInput}>
-                        <InputMask mask="(+1) 999 999 99 99" value={phone} onChange={c => setState({ ...state, phone: c.target.value })} maskChar=" ">
+                        <InputMask mask="(+1) 999 999 9999" value={phone} onChange={c => setState({ ...state, phone: c.target.value })} maskChar=" ">
                             {() => <VCERNTextField fullWidth={false} variant="outlined" placeholder="Enter Cell Phone Number" size="small" />}
                         </InputMask>
                     </div>
@@ -194,7 +195,7 @@ function Settings({
                 </div>
                 <div className={classes.inviteList}>
                     <div className={classes.inviteIcon}>{icons.copy}</div>
-                    <VCERNTypography className={classes.grow} variant="body1" value="Copy Text" />
+                    <VCERNTypography className={classes.grow} variant="body1" value="Shareable Link" />
                     <VCERNButton value="Copy." size="small" startIcon={icons.copy} onClick={handleCopyText} />
                 </div>
             </div>
@@ -222,7 +223,8 @@ function Settings({
                             <VCERNAvatar className={classes.image} src={el?.image} onClick={() => history.push(`/member/${el?._id}`, { member: el })} />
                             <div className={classes.grow}>
                                 <VCERNTypography className={classes.boldText} variant="body1" value={`${el?.first_name} ${el?.last_name}`} />
-                                <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.dob)}`} customColor="#6F7F9F" />
+                                <VCERNTypography className={classes.boldText} variant="body2" value={`Membership ID: ${el?._id}`} />
+                                <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.created)}`} customColor="#6F7F9F" />
                             </div>
                             <VCERNButton variant="outlined" value="Remove" size="small" onClick={() => handleActionClick(el?.membership_id, 'Member')} />
                         </div>
@@ -230,7 +232,8 @@ function Settings({
                     </div>
                 ))}
             </div>
-            <VCERNButton value="Invite Members in this Pool" startIcon={icons.add} className={classes.button} onClick={() => setShowMemberInviteModal(true)} />
+
+            {!isDefaultPool && <VCERNButton value="Invite members to this pool" startIcon={icons.add} className={classes.button} onClick={() => setShowMemberInviteModal(true)} />}
 
             <Grid container spacing={1} className={classes.listHeader}>
                 <Grid item xs={12} md={6} lg={8}>
@@ -247,7 +250,8 @@ function Settings({
                             <VCERNAvatar className={classes.image} src={el?.image} />
                             <div className={classes.grow}>
                                 <VCERNTypography className={classes.boldText} variant="body1" value={`${el?.first_name} ${el?.last_name}`} />
-                                <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.dob)}`} customColor="#6F7F9F" />
+                                <VCERNTypography className={classes.boldText} variant="body2" value={`Membership ID: ${el?._id}`} />
+                                <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.created)}`} customColor="#6F7F9F" />
                             </div>
                             <VCERNButton variant="outlined" value="Remove" size="small" onClick={() => handleActionClick(el?._id, 'Admin')} />
                         </div>
@@ -279,7 +283,8 @@ function Settings({
                                 <VCERNAvatar className={classes.image} src={el?.image} />
                                 <div className={classes.grow}>
                                     <VCERNTypography className={classes.boldText} variant="body1" value={`${el?.first_name} ${el?.last_name}`} />
-                                    <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.dob)}`} customColor="#6F7F9F" />
+                                    <VCERNTypography className={classes.boldText} variant="body2" value={`Membership ID: ${el?._id}`} />
+                                    <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.created)}`} customColor="#6F7F9F" />
                                 </div>
                                 <VCERNButton variant="outlined" startIcon={icons.add} value="Invite" size="small" onClick={() => handleInviteMember(el?._id)} />
                             </div>
@@ -305,7 +310,8 @@ function Settings({
                                 <VCERNAvatar className={classes.image} src={el?.image} />
                                 <div className={classes.grow}>
                                     <VCERNTypography className={classes.boldText} variant="body1" value={`${el?.first_name} ${el?.last_name}`} />
-                                    <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.dob)}`} customColor="#6F7F9F" />
+                                    <VCERNTypography className={classes.boldText} variant="body2" value={`Membership ID: ${el?._id}`} />
+                                    <VCERNTypography className={classes.boldText} variant="body2" value={`Member Since ${getFormattedDate(el?.created)}`} customColor="#6F7F9F" />
                                 </div>
                                 <VCERNButton variant="outlined" startIcon={icons.add} value="Add Admin" size="small" onClick={() => handleAddAdmin(el?._id)} />
                             </div>

@@ -58,14 +58,14 @@ function Verify({ sendVerificationCode, verify, type, token }) {
                     <Grid item xs={12} md={6} lg={6}>
                         <div className={classes.rightBox}>
                             <VCERNTypography className={classes.text} variant="h4" value="Verification" />
-                            <VCERNTypography className={classes.text} variant="h5" value="Check your mail" />
-                            <VCERNTypography className={classes.text} variant="body1" value="Enter the verification code we just sent you on your email address." />
+
+                            <VCERNTypography className={classes.text} variant="body1" value="Check your email for the verification code we just sent you and enter it below.... " />
 
                             <PinInput focus length={4} type="numeric" onChange={val => setCode(val)} style={{ margin: '30px 0' }} />
 
                             <VCERNTypography variant="body1">
-                                Didn’t Received Any Code?{' '}
-                                <VCERNTypography color="secondary" variant="body1" component="span" value="Resend" className={classes.underlined} onClick={handleResend} />
+                                Didn’t received a code?{' '}
+                                <VCERNTypography color="secondary" variant="body1" component="span" value=" Resend" className={classes.underlined} onClick={handleResend} />
                             </VCERNTypography>
 
                             <VCERNButton className={classes.text} fullWidth value="Send" onClick={handleSubmit} disabled={!(code.length > 3)} />

@@ -469,7 +469,7 @@ const removeMemberFromPool = async (id, token, onError) => {
 };
 
 const updateMember = async (data, token, onError) => {
-    const { newPhone, newEmail, newState, newCity, newPassword, newApt, newStreet } = data;
+    const { newPhone, newEmail, newState, newCity, newPassword, newApt, newStreet, image } = data;
     try {
         const response = await api.patch(
             `/member`,
@@ -481,6 +481,7 @@ const updateMember = async (data, token, onError) => {
                 city: newCity,
                 apt: newApt,
                 street_address: newStreet,
+                image,
             },
             { headers: { 'auth-token': token } },
         );

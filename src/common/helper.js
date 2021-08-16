@@ -21,7 +21,7 @@ export const getDateTime = time => {
 };
 
 export const getFormattedDate = date => {
-    return moment(date).format('D MMMM YYYY');
+    return moment(date).format('MM/DD/YYYY');
 };
 
 export const getCurrentMonth = () => {

@@ -36,7 +36,7 @@ function SingleBlog({ setCurrentPageTitle }) {
 
     return (
         <div>
-            <VCERNAvatar variant="rounded" src={image} className={classes.image} />
+            <img src={image} className={classes.image} />
             <VCERNTypography variant="h3" value={title} className={classes.title} />
             <div className={classes.inline}>
                 <VCERNTypography variant="body1" value={author} className={classes.boldText} customColor="#657285" />
@@ -45,7 +45,7 @@ function SingleBlog({ setCurrentPageTitle }) {
             <Divider className={classes.divider} />
             <VCERNTypography variant="body1" value={description} className={classes.body} customColor="#657285" />
             <a className={classes.underline} href={link} target="_blank" rel="noreferrer">
-                {link}
+                Read More
             </a>
         </div>
     );
