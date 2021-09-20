@@ -70,7 +70,9 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: "flex",
     alignItems: "center",
+    flexDirection: "column",
     justifyContent: "space-between",
+    alignItems: "flex-start",
   },
   displayPicture: { marginRight: 15, height: 50, width: 50 },
   otherDisplayPicture: { marginLeft: 15, height: 50, width: 50 },

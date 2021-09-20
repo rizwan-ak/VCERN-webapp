@@ -1,7 +1,8 @@
 import React from "react";
 import VCERNTypography from "../../common/elements/VCERNTypography";
 import VCERNTextField from "../../common/elements/VCERNTextField";
-import { Divider, Grid, makeStyles } from "@material-ui/core";
+import { Divider, Grid, IconButton, makeStyles } from "@material-ui/core";
+import { FileCopy } from "@material-ui/icons";
 import { useState } from "react";
 import icons from "../../common/icons";
 import VCERNButton from "../../common/elements/VCERNButton";
@@ -18,6 +19,7 @@ import VCERNConfirmationModal from "../../common/elements/VCERNConfirmationModal
 import { FacebookShareButton } from "react-share";
 import VCERNAlert from "../../common/elements/VCERNAlert";
 import { useHistory } from "react-router-dom";
+import { copyToClipboard } from "../../utils/copyToClipboard";
 
 const useStyles = makeStyles((theme) => ({
   input: { margin: "5px 0" },
@@ -34,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   image: { height: 60, width: 60, marginRight: 15, cursor: "pointer" },
   grow: { flexGrow: 1 },
   listHeader: { margin: "10px 0" },
+  inline: { display: "flex", alignItems: "center" },
 }));
 
 function Settings({
@@ -316,11 +319,21 @@ function Settings({
                   variant="body1"
                   value={`${el?.first_name} ${el?.last_name}`}
                 />
-                <VCERNTypography
-                  className={classes.boldText}
-                  variant="body2"
-                  value={`Membership ID: ${el?._id}`}
-                />
+                <div className={classes.inline}>
+                  <VCERNTypography
+                    className={classes.boldText}
+                    variant="body2"
+                    value={`Membership ID: ${el?._id}`}
+                  />
+                  <IconButton
+                    onClick={async () => {
+                      await copyToClipboard(el?._id);
+                      setSuccessMessage("Membership ID copied");
+                    }}
+                  >
+                    <FileCopy />
+                  </IconButton>
+                </div>
                 <VCERNTypography
                   className={classes.boldText}
                   variant="body2"

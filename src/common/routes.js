@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -53,7 +53,15 @@ import VCERNAddBlog from "../pages/vcern/AddBlog";
 import VCERNSingleOrganization from "../pages/vcern/SingleOrganization";
 import VCERNPayments from "../pages/vcern/Payments";
 
-function Routes({ loading, type, error, token, setError, currentUser }) {
+function Routes({
+  loading,
+  type,
+  error,
+  token,
+  setError,
+  currentUser,
+  setLoading,
+}) {
   const commonRoutes = [
     { path: "/", component: Landing },
     { path: "/login", component: Login },
@@ -121,6 +129,10 @@ function Routes({ loading, type, error, token, setError, currentUser }) {
       );
     }
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   return (
     <>
@@ -209,4 +221,7 @@ function Routes({ loading, type, error, token, setError, currentUser }) {
   );
 }
 
-export default connect((state) => state, { setError: AC.setError })(Routes);
+export default connect((state) => state, {
+  setError: AC.setError,
+  setLoading: AC.setLoading,
+})(Routes);

@@ -706,6 +706,7 @@ const AC = {
   fetchPoolStats,
   fetchOrganizationStats,
   fetchMembersDataByPool,
+  setLoading,
 };
 
 export default AC;

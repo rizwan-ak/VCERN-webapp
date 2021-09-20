@@ -100,18 +100,21 @@ function Profile({
     setMessage("");
     setNotificationModal(false);
   };
+  console.log({ currentUser });
   return (
     <Grid container>
       <DashboardHeader title={name} subTitle={tagline} id={state?._id} />
       <div className={classes.main}>
-        <div className={classes.buttonsHolder}>
-          <VCERNButton
-            startIcon={icons.notification}
-            value="Send a Notification"
-            align="left"
-            onClick={() => setNotificationModal(true)}
-          />
-        </div>
+        {!currentUser.beneficiary && (
+          <div className={classes.buttonsHolder}>
+            <VCERNButton
+              startIcon={icons.notification}
+              value="Send a Notification"
+              align="left"
+              onClick={() => setNotificationModal(true)}
+            />
+          </div>
+        )}
         <div>
           <VCERNTypography
             className={classes.title}
@@ -182,8 +185,7 @@ function Profile({
               value={bAddress}
             />
           </div>
-
-          {state?.beneficiary?.email && (
+          {!currentUser.beneficiary && state?.beneficiary?.email && (
             <VCERNButton
               target="_blank"
               href={`mailto:${state?.beneficiary?.email}`}
